@@ -29,6 +29,14 @@
                 "command": "extension.editRules",
                 "title": "Replace Rules: Edit Rules"
             }
+        ],
+        "keybindings": [
+            {
+                "command": "extension.chooseRule",
+                "key": "ctrl+alt+r",
+                "mac": "cmd+alt+r",
+                "when": "editorTextFocus"
+            }
         ]
     },
     "scripts": {
