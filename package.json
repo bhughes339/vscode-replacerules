@@ -14,6 +14,11 @@
     "categories": [
         "Other"
     ],
+    "keywords": [
+        "regex",
+        "regular expressions",
+        "replace"
+    ],
     "activationEvents": [
         "onCommand:extension.chooseRule",
         "onCommand:extension.editRules"
@@ -23,11 +28,13 @@
         "commands": [
             {
                 "command": "extension.chooseRule",
-                "title": "Run Replace Rule..."
+                "title": "Run Rule...",
+                "category": "Replace Rules"
             },
             {
                 "command": "extension.editRules",
-                "title": "Replace Rules: Edit Rules"
+                "title": "Edit Rules",
+                "category": "Replace Rules"
             }
         ],
         "keybindings": [
