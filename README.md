@@ -1,6 +1,6 @@
 # Replace Rules
 
-[![Version](https://vsmarketplacebadge.apphb.com/version/bhughes339.magic.svg)](https://marketplace.visualstudio.com/items?itemName=bhughes339.replacerules)
+[![Version](https://vsmarketplacebadge.apphb.com/version/bhughes339.replacerules.svg)](https://marketplace.visualstudio.com/items?itemName=bhughes339.replacerules)
 
 Create search/replace rules. A "rule" is one or more search/replace patterns that can be applied to a selection of text (or the entire document).
 

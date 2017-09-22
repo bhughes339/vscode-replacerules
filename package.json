@@ -1,5 +1,5 @@
 {
-    "name": "vscode-replacerules",
+    "name": "replacerules",
     "displayName": "Replace Rules",
     "description": "Create search/replace rules using Javascript regular expressions",
     "version": "0.1.0",
