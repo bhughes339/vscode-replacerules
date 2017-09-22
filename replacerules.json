@@ -1,0 +1,10 @@
+[
+    {
+        "name": "Remove trailing and leading whitespace",
+        "find": [
+            "^[ \\t]+",
+            "[ \\t]+$"
+        ],
+        "replace": ""
+    }
+]

@@ -1,0 +1,48 @@
+{
+    "name": "vscode-replacerules",
+    "displayName": "Replace Rules",
+    "description": "Create search/replace rules using Javascript regular expressions",
+    "version": "0.1.0",
+    "publisher": "bhughes339",
+    "engines": {
+        "vscode": "^1.16.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/bhughes339/vscode-replacerules.git"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onCommand:extension.chooseRule",
+        "onCommand:extension.editRules"
+    ],
+    "main": "./out/extension",
+    "contributes": {
+        "commands": [
+            {
+                "command": "extension.chooseRule",
+                "title": "Run Replace Rule..."
+            },
+            {
+                "command": "extension.editRules",
+                "title": "Replace Rules: Edit Rules"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "node ./node_modules/typescript/bin/tsc -p ./",
+        "watch": "node ./node_modules/typescript/bin/tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.5.2",
+        "vscode": "^1.1.5",
+        "mocha": "^3.5.0",
+        "@types/node": "^7.0.43",
+        "@types/mocha": "^2.2.42"
+    }
+}
