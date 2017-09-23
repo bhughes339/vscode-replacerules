@@ -12,7 +12,7 @@ Replace Rules uses the configuration file `replacerules.json` to store rules. Th
 
 - The **Replace Rules: Edit Rules** command will initialize this file if it does not already exist
 
-Once you have one or more rules defined in `replacerules.json`, open the Command Palette (`Ctrl+Shift+P`) and select **Run Replace Rule...**
+Once you have one or more rules defined in `replacerules.json`, press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>R</kbd> and select the rule you'd like to run across your selection or document. Alternatively, open the Command Palette (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>) and select **Run Replace Rule...**
 
 ## Rule definitions
 
