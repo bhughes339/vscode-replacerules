@@ -2,4 +2,5 @@
 .git/**
 **/*.ts
 .gitignore
+.directory
 tsconfig.json
