@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.1.4
+- Bugfix and change config to array
+
 ## 0.1.3
 - Add support for regex flags per-rule (default: gm)
 

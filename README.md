@@ -24,7 +24,7 @@ Press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>R</kbd> and select the rule you'd like
 ## Example ruleset
 
 ```json
-"rules": [
+"replacerules.rules": [
     {
         "name": "Remove trailing and leading whitespace",
         "find": [

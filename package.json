@@ -2,7 +2,7 @@
     "name": "replacerules",
     "displayName": "Replace Rules",
     "description": "Create search/replace rules using Javascript regular expressions",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "publisher": "bhughes339",
     "engines": {
         "vscode": "^1.16.0"
@@ -44,20 +44,18 @@
             "title": "Replace Rules",
             "properties": {
                 "replacerules.rules": {
-                    "type": "object",
+                    "type": "array",
                     "description": "Dictionary of rulesets for Replace Rules",
-                    "default": {
-                        "rules": [
-                            {
-                                "name": "Remove trailing and leading whitespace",
-                                "find": [
-                                    "^[ \\t]+",
-                                    "[ \\t]+$"
-                                ],
-                                "replace": ""
-                            }
-                        ]
-                    }
+                    "default": [
+                        {
+                            "name": "Remove trailing and leading whitespace",
+                            "find": [
+                                "^[ \\t]+",
+                                "[ \\t]+$"
+                            ],
+                            "replace": ""
+                        }
+                    ]
                 }
             }
         }

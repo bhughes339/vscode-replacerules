@@ -19,7 +19,7 @@ export function activate(context: ExtensionContext) {
 function readRulesAndExec() {
     let config = vscode.workspace.getConfiguration("replacerules");
     let configRules = config.get<any>("rules");
-    chooseRule(configRules.rules);
+    chooseRule(configRules);
 }
 
 function chooseRule(rules) {
