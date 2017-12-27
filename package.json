@@ -2,7 +2,7 @@
     "name": "replacerules",
     "displayName": "Replace Rules",
     "description": "Create search/replace rules using Javascript regular expressions",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "publisher": "bhughes339",
     "engines": {
         "vscode": "^1.16.0"
@@ -20,8 +20,7 @@
         "replace"
     ],
     "activationEvents": [
-        "onCommand:extension.chooseRule",
-        "onCommand:extension.editRules"
+        "onCommand:extension.chooseRule"
     ],
     "main": "./out/extension",
     "contributes": {
@@ -29,11 +28,6 @@
             {
                 "command": "extension.chooseRule",
                 "title": "Run Rule...",
-                "category": "Replace Rules"
-            },
-            {
-                "command": "extension.editRules",
-                "title": "Edit Rules",
                 "category": "Replace Rules"
             }
         ],
@@ -44,7 +38,29 @@
                 "mac": "cmd+alt+r",
                 "when": "editorTextFocus"
             }
-        ]
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "Replace Rules",
+            "properties": {
+                "replacerules.rules": {
+                    "type": "object",
+                    "description": "Dictionary of rulesets for Replace Rules",
+                    "default": {
+                        "rules": [
+                            {
+                                "name": "Remove trailing and leading whitespace",
+                                "find": [
+                                    "^[ \\t]+",
+                                    "[ \\t]+$"
+                                ],
+                                "replace": ""
+                            }
+                        ]
+                    }
+                }
+            }
+        }
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",

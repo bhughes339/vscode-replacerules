@@ -12,59 +12,23 @@ import TextEditor = vscode.TextEditor;
 export function activate(context: ExtensionContext) {
     console.log('Congratulations, your extension "vscode-replacerules" is now active!');
     vscode.commands.registerCommand('extension.chooseRule', function() {
-        readRulesAndExec(getRulePath(context));
-    });
-    vscode.commands.registerCommand('extension.editRules', function() {
-        let path = getRulePath(context);
-        let fs = require('fs');
-        fs.stat(path, function(err, stats) {
-            let f = vscode.Uri.file(path);
-            f = (stats) ? f : f.with( { scheme: 'untitled'} );
-            Window.showTextDocument(f).then(function(e) {
-                if (!stats) newRuleFile(context, e);
-            });
-        });
+        readRulesAndExec();
     });
 }
 
-function getRulePath(context: ExtensionContext) {
-    let isInsiders = context.extensionPath.includes('insiders');
-    let userPath = process.env.APPDATA;
-    let osType = 'win';
-    if (!userPath) {
-        if (process.platform == 'darwin') {
-            userPath = process.env.HOME + '/Library/Application Support';
-            osType = 'mac';
-        } else if (process.platform == 'linux') {
-            let os = require("os");
-            userPath = os.homedir() + '/.config';
-            osType = 'linux';
-        } else {
-            userPath = '/var/local';
-            osType = 'linux';
-        }
-    }
-    let usr = isInsiders ? '/Code - Insiders/User/replacerules.json' : '/Code/User/replacerules.json';
-    return userPath.concat(usr);
-}
-
-function readRulesAndExec(path: string) {
-    let fs = require('fs');
-    fs.readFile(path, { encoding: 'utf8' }, function(err, data) {
-        if (err) console.log(err);
-        if (data) {
-            let rules = JSON.parse(data);
-            if (Array.isArray(rules)) chooseRule(rules);    
-        }
-    });
+function readRulesAndExec() {
+    let config = vscode.workspace.getConfiguration("replacerules");
+    let configRules = config.get<any>("rules");
+    chooseRule(configRules.rules);
 }
 
 function chooseRule(rules) {
     let items: vscode.QuickPickItem[] = [];
     for (let i = 0; i < rules.length; i++) {
-        if (rules[i].name && rules[i].find)
+        let currentRule = rules[i];
+        if (currentRule.name && currentRule.find)
             items.push({
-                label: rules[i].name,
+                label: currentRule.name,
                 description: "Replace Rule "+i
             });
     }
@@ -96,18 +60,6 @@ function chooseRule(rules) {
             }
         }
         doReplace(e, d, sel, find, ruleReplaces);
-    });
-}
-
-function newRuleFile(context: ExtensionContext, e: TextEditor) {
-    Window.showInformationMessage("replacerules.json not found. Using default settings...");
-    let f = context.extensionPath + '/replacerules.json';
-    vscode.workspace.openTextDocument(f).then(function(d) {
-        let srcText = d.getText();
-        let destDoc = e.document;
-        e.edit(function (edit) {
-            edit.insert(destDoc.positionAt(0), srcText);
-        });
     });
 }
 

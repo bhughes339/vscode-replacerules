@@ -8,15 +8,11 @@ Replace Rules uses Javascript regular expressions for searching and replacing. S
 
 ## Getting started
 
-Replace Rules uses the configuration file `replacerules.json` to store rules. This file is located in your VSCode "User" folder.
-
-- The **Replace Rules: Edit Rules** command will initialize this file if it does not already exist
-
-Once you have one or more rules defined in `replacerules.json`, press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>R</kbd> and select the rule you'd like to run across your selection or document. Alternatively, open the Command Palette (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>) and select **Run Replace Rule...**
+Press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>R</kbd> and select the rule you'd like to run across your selection or document. Alternatively, open the Command Palette (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>) and select **Run Replace Rule...**
 
 ## Rule definitions
 
-`replacerules.json` is an array of objects, each of which represents a single search/replace rule. A rule consists of the following components:
+`replacerules.rules` is an array of objects, each of which represents a single search/replace rule. A rule consists of the following components:
 
 - `name` - The description of the rule that will appear in the command pallette
 - `find` - A sequence of regular expressions to be searched on. Can be a single string or an array of strings.
@@ -27,7 +23,7 @@ Once you have one or more rules defined in `replacerules.json`, press <kbd>Ctrl<
 ## Example ruleset
 
 ```json
-[
+"rules": [
     {
         "name": "Remove trailing and leading whitespace",
         "find": [
