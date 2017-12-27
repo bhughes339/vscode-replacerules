@@ -27,10 +27,10 @@ function chooseRule(rules) {
     for (let i = 0; i < rules.length; i++) {
         let currentRule = rules[i];
         if (currentRule.name && currentRule.find)
-            items.push({
-                label: currentRule.name,
-                description: "Replace Rule "+i
-            });
+        items.push({
+            label: currentRule.name,
+            description: "Replace Rule "+i
+        });
     }
     Window.showQuickPick(items).then(function (selection) {
         if (!selection) return;
@@ -45,6 +45,8 @@ function chooseRule(rules) {
         let index = selection.description.slice(13);
         let thisRule = rules[index];
         let ruleFinds = (Array.isArray(thisRule.find)) ? thisRule.find : [thisRule.find];
+        if (!thisRule.flags) thisRule.flags = "";
+        let ruleFlags = (Array.isArray(thisRule.flags)) ? thisRule.flags : [thisRule.flags];
         if (!thisRule.replace) thisRule.replace = "";
         let ruleReplaces = (Array.isArray(thisRule.replace)) ? thisRule.replace : [thisRule.replace];
         if ((ruleReplaces.length > 1) && (ruleFinds.length !== ruleReplaces.length)) {
@@ -53,10 +55,12 @@ function chooseRule(rules) {
         }
         let find = [];
         for (let i = 0; i < ruleFinds.length; i++) {
+            let flags = (ruleFlags[i]) ? ruleFlags[i] : ((ruleFlags[0]) ? ruleFlags[0] : 'gm');
             try {
-                find.push(new RegExp(ruleFinds[i], 'g'));
+                find.push(new RegExp(ruleFinds[i], flags));
             } catch (err) {
                 if (err.name === "SyntaxError") Window.showErrorMessage("Invalid regular expression");
+                return;
             }
         }
         doReplace(e, d, sel, find, ruleReplaces);
@@ -66,19 +70,17 @@ function chooseRule(rules) {
 function doReplace(e: TextEditor, d: TextDocument, sel: Selection[], findArray: RegExp[], replaceArray: string[]) {
 	e.edit(function (edit) {
 		for (var i = 0; i < sel.length; i++) {
-            for (var j = sel[i].start.line; j <= sel[i].end.line; j++) {
-                let dirtyLine = d.lineAt(j).text;
-                for (var k = 0; k < findArray.length; k++) {
-                    let find = findArray[k];
-                    let replace = (replaceArray[k]) ? replaceArray[k] : replaceArray[0];
-                    try {
-                        dirtyLine = dirtyLine.replace(find, replace);
-                    } catch (err) {
-                        console.log(err);
-                    }
+            let fText = d.getText(sel[i]);
+            for (var k = 0; k < findArray.length; k++) {
+                let find = findArray[k];
+                let replace = (replaceArray[k]) ? replaceArray[k] : replaceArray[0];
+                try {
+                    fText = fText.replace(find, replace);
+                } catch (err) {
+                    console.log(err);
                 }
-                edit.replace(d.lineAt(j).range, dirtyLine);
             }
+            edit.replace(sel[i], fText);
         }
 	});
 }

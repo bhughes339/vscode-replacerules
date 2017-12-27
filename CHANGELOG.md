@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.1.3
+- Add support for regex flags per-rule (default: gm)
+
 ## 0.1.2
 - Use settings object instead of separate json file
 

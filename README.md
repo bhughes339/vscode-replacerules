@@ -16,7 +16,8 @@ Press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>R</kbd> and select the rule you'd like
 
 - `name` - The description of the rule that will appear in the command pallette
 - `find` - A sequence of regular expressions to be searched on. Can be a single string or an array of strings.
-- `replace` - An optional sequence of regular expressions used as replacements. Can be a single string or an array of strings. If this is an empty string or null, each `find` will be deleted rather than replaced.
+- `replace` - (optional) A sequence of regular expressions used as replacements. Can be a single string or an array of strings. If this is an empty string or unspecified, each `find` will be deleted rather than replaced.
+- `flags` - (optional) A set of regex flags to apply to the rule. If only one set of flags is specified, it will be applied to all `finds` in the rule. The default flags are gm (global, multiline).
 
 **NOTE:** In the case of arrays, each `find` must have a corresponding `replace`. You can also use a single `replace`, which will be used for each instance of `find`.
 
