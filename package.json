@@ -22,7 +22,7 @@
     "activationEvents": [
         "onCommand:extension.chooseRule"
     ],
-    "main": "./out/extension",
+    "main": "./out/src/extension",
     "contributes": {
         "commands": [
             {

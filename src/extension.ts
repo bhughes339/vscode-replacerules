@@ -26,11 +26,12 @@ function chooseRule(rules) {
     let items: vscode.QuickPickItem[] = [];
     for (let i = 0; i < rules.length; i++) {
         let currentRule = rules[i];
-        if (currentRule.name && currentRule.find)
-        items.push({
-            label: currentRule.name,
-            description: "Replace Rule "+i
-        });
+        if (currentRule.name && currentRule.find) {
+            items.push({
+                label: currentRule.name,
+                description: "Replace Rule "+i
+            });
+        }
     }
     Window.showQuickPick(items).then(function (selection) {
         if (!selection) return;
