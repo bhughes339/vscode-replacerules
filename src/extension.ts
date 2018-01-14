@@ -23,18 +23,19 @@ function readRulesAndExec() {
 }
 
 function chooseRule(rules) {
-    let items: vscode.QuickPickItem[] = [];
+    let items = [];
     for (let i = 0; i < rules.length; i++) {
         let currentRule = rules[i];
         if (currentRule.name && currentRule.find) {
             items.push({
-                label: currentRule.name,
-                description: "Replace Rule "+i
+                label: "Replace Rule: "+currentRule.name,
+                description: "",
+                rule: currentRule
             });
         }
     }
-    Window.showQuickPick(items).then(function (selection) {
-        if (!selection) return;
+    Window.showQuickPick(items).then(function (qpItem) {
+        if (!qpItem) return;
         let e = Window.activeTextEditor;
         let d = e.document;
         let sel = e.selections;
@@ -43,11 +44,14 @@ function chooseRule(rules) {
             let end = d.lineAt(d.lineCount-1).range.end;
             sel[0] = new Selection(start, end);
         }
-        let index = selection.description.slice(13);
-        let thisRule = rules[index];
+        let thisRule = qpItem.rule;
         let ruleFinds = (Array.isArray(thisRule.find)) ? thisRule.find : [thisRule.find];
         if (!thisRule.flags) thisRule.flags = "";
         let ruleFlags = (Array.isArray(thisRule.flags)) ? thisRule.flags : [thisRule.flags];
+        if ((ruleFlags.length > 1) && (ruleFinds.length !== ruleFlags.length)) {
+            Window.showErrorMessage("Flags string array size needs to equal Find string array size (or 1)");
+            return;
+        }
         if (!thisRule.replace) thisRule.replace = "";
         let ruleReplaces = (Array.isArray(thisRule.replace)) ? thisRule.replace : [thisRule.replace];
         if ((ruleReplaces.length > 1) && (ruleFinds.length !== ruleReplaces.length)) {
