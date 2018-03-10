@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.1.5
+- Code rewrite
+- Restrict rules to be applied line-by-line
+- Fix cursor being shifted after rules were executed
+
 ## 0.1.4
 - Bugfix and change config to array
 

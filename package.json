@@ -2,7 +2,7 @@
     "name": "replacerules",
     "displayName": "Replace Rules",
     "description": "Create search/replace rules using Javascript regular expressions",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "publisher": "bhughes339",
     "engines": {
         "vscode": "^1.16.0"
@@ -17,7 +17,8 @@
     "keywords": [
         "regex",
         "regular expressions",
-        "replace"
+        "replace",
+        "regreplace"
     ],
     "activationEvents": [
         "onCommand:extension.chooseRule"

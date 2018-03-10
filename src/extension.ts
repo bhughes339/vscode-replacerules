@@ -1,91 +1,98 @@
-'use strict';
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import * as path from 'path';
-import ExtensionContext = vscode.ExtensionContext;
-import Window = vscode.window;
-import Selection = vscode.Selection;
-import TextDocument = vscode.TextDocument;
-import TextEditor = vscode.TextEditor;
 
-export function activate(context: ExtensionContext) {
-    console.log('Congratulations, your extension "vscode-replacerules" is now active!');
-    vscode.commands.registerCommand('extension.chooseRule', function() {
-        readRulesAndExec();
-    });
+import { TextEditor, Range } from 'vscode';
+import Window = vscode.window;
+
+export function activate(context: vscode.ExtensionContext) {
+    context.subscriptions.push(vscode.commands.registerTextEditorCommand('extension.chooseRule', ruleReplace));
 }
 
-function readRulesAndExec() {
+class Replacement {
+    static defaultFlags = 'gm';
+    public find: RegExp;
+    public replace: string;
+
+    public constructor(find: string, replace: string, flags: string) {
+        this.find = new RegExp(find, flags || Replacement.defaultFlags);
+        this.replace = replace || '';
+    }
+}
+
+class ReplaceRule {
+    public name: string;
+    public steps: Replacement[];
+
+    public constructor(rule: any) {
+        this.name = rule.name;
+        let ruleSteps: Replacement[] = [];
+        let find = (Array.isArray(rule.find)) ? rule.find : [rule.find];
+        let replace = (typeof rule.replace === 'undefined') ? null : rule.replace;
+        let flags = (typeof rule.flags === 'undefined') ? null : rule.flags;
+        for (let i = 0; i < find.length; i++) {
+            let stepFlags = (Array.isArray(flags)) ? flags[i] : flags;
+            let stepReplace = (Array.isArray(replace)) ? replace[i] : replace;
+            ruleSteps.push(new Replacement(find[i], stepReplace, stepFlags));
+        }
+        this.steps = ruleSteps;
+    }
+}
+
+function ruleReplace(textEditor: TextEditor) {
     let config = vscode.workspace.getConfiguration("replacerules");
     let configRules = config.get<any>("rules");
-    chooseRule(configRules);
-}
-
-function chooseRule(rules) {
     let items = [];
-    for (let i = 0; i < rules.length; i++) {
-        let currentRule = rules[i];
-        if (currentRule.name && currentRule.find) {
-            items.push({
-                label: "Replace Rule: "+currentRule.name,
-                description: "",
-                rule: currentRule
-            });
+    for (const r of configRules) {
+        if (r.name && r.find) {
+            try {
+                items.push({
+                    label: "Replace Rule: " + r.name,
+                    description: "",
+                    ruleClass: new ReplaceRule(r)
+                });
+            } catch (err) {
+                Window.showErrorMessage('Error parsing rule ' + r.name + ': ' + err.message);
+            }
         }
     }
-    Window.showQuickPick(items).then(function (qpItem) {
+    vscode.window.showQuickPick(items).then(qpItem => {
         if (!qpItem) return;
-        let e = Window.activeTextEditor;
-        let d = e.document;
-        let sel = e.selections;
-        if (sel.length === 1 && sel[0].isEmpty) {
-            let start = d.positionAt(0);
-            let end = d.lineAt(d.lineCount-1).range.end;
-            sel[0] = new Selection(start, end);
+        try {
+            doReplace(textEditor, qpItem.ruleClass);
+        } catch (err) {
+            Window.showErrorMessage('Error executing rule ' + qpItem.ruleClass.name + ': ' + err.message);
         }
-        let thisRule = qpItem.rule;
-        let ruleFinds = (Array.isArray(thisRule.find)) ? thisRule.find : [thisRule.find];
-        if (!thisRule.flags) thisRule.flags = "";
-        let ruleFlags = (Array.isArray(thisRule.flags)) ? thisRule.flags : [thisRule.flags];
-        if ((ruleFlags.length > 1) && (ruleFinds.length !== ruleFlags.length)) {
-            Window.showErrorMessage("Flags string array size needs to equal Find string array size (or 1)");
-            return;
-        }
-        if (!thisRule.replace) thisRule.replace = "";
-        let ruleReplaces = (Array.isArray(thisRule.replace)) ? thisRule.replace : [thisRule.replace];
-        if ((ruleReplaces.length > 1) && (ruleFinds.length !== ruleReplaces.length)) {
-            Window.showErrorMessage("Replace string array size needs to equal Find string array size (or 1)");
-            return;
-        }
-        let find = [];
-        for (let i = 0; i < ruleFinds.length; i++) {
-            let flags = (ruleFlags[i]) ? ruleFlags[i] : ((ruleFlags[0]) ? ruleFlags[0] : 'gm');
-            try {
-                find.push(new RegExp(ruleFinds[i], flags));
-            } catch (err) {
-                if (err.name === "SyntaxError") Window.showErrorMessage("Invalid regular expression");
-                return;
-            }
-        }
-        doReplace(e, d, sel, find, ruleReplaces);
     });
+    return;
 }
 
-function doReplace(e: TextEditor, d: TextDocument, sel: Selection[], findArray: RegExp[], replaceArray: string[]) {
-	e.edit(function (edit) {
-		for (var i = 0; i < sel.length; i++) {
-            let fText = d.getText(sel[i]);
-            for (var k = 0; k < findArray.length; k++) {
-                let find = findArray[k];
-                let replace = (replaceArray[k]) ? replaceArray[k] : replaceArray[0];
-                try {
-                    fText = fText.replace(find, replace);
-                } catch (err) {
-                    console.log(err);
-                }
-            }
-            edit.replace(sel[i], fText);
+function doReplace(e: TextEditor, rule: ReplaceRule) {
+    let d = e.document;
+    let sel = e.selections;
+    let replaceRanges: Range[] = [];
+    for (const s of sel) {
+        if (! s.isEmpty) {
+            replaceRanges.push(new Range(s.start, s.end));
         }
-	});
+    }
+    if (replaceRanges.length === 0) {
+        let start = d.positionAt(0);
+        let end = d.lineAt(d.lineCount - 1).range.end;
+        replaceRanges[0] = new Range(start, end);
+    }
+    e.edit((edit) => {
+        for (const range of replaceRanges) {
+            for (let i = range.start.line; i <= range.end.line; i++) {
+                let singleLineRange = range.intersection(d.lineAt(i).range);
+                if (singleLineRange === undefined) {
+                    continue;
+                }
+                let fText = d.getText(singleLineRange);
+                for (const r of rule.steps) {
+                    fText = fText.replace(r.find, r.replace);
+                }
+                edit.replace(singleLineRange, fText);
+            }
+        }
+    });
+    return;
 }
