@@ -86,11 +86,12 @@ function doReplace(e: TextEditor, rule: ReplaceRule) {
                 if (singleLineRange === undefined) {
                     continue;
                 }
-                let fText = d.getText(singleLineRange);
+                let oldText = d.getText(singleLineRange);
+                let fText = oldText;
                 for (const r of rule.steps) {
                     fText = fText.replace(r.find, r.replace);
                 }
-                edit.replace(singleLineRange, fText);
+                if (fText !== oldText) edit.replace(singleLineRange, fText);
             }
         }
     });
