@@ -4,7 +4,12 @@ import { TextEditor, Range } from 'vscode';
 import Window = vscode.window;
 
 export function activate(context: vscode.ExtensionContext) {
-    context.subscriptions.push(vscode.commands.registerTextEditorCommand('extension.chooseRule', ruleReplace));
+    context.subscriptions.push(vscode.commands.registerTextEditorCommand('extension.chooseRule',
+        ruleReplace));
+}
+
+const objToArray = (obj: any) => {
+    return (Array.isArray(obj)) ? obj : Array(obj);
 }
 
 class Replacement {
@@ -25,13 +30,10 @@ class ReplaceRule {
     public constructor(rule: any) {
         this.name = rule.name;
         let ruleSteps: Replacement[] = [];
-        let find = (Array.isArray(rule.find)) ? rule.find : [rule.find];
-        let replace = (typeof rule.replace === 'undefined') ? null : rule.replace;
-        let flags = (typeof rule.flags === 'undefined') ? null : rule.flags;
+        let find = objToArray(rule.find);
         for (let i = 0; i < find.length; i++) {
-            let stepFlags = (Array.isArray(flags)) ? flags[i] : flags;
-            let stepReplace = (Array.isArray(replace)) ? replace[i] : replace;
-            ruleSteps.push(new Replacement(find[i], stepReplace, stepFlags));
+            ruleSteps.push(new Replacement(find[i],
+                objToArray(rule.replace)[i], objToArray(rule.flags)[i]));
         }
         this.steps = ruleSteps;
     }
@@ -40,9 +42,10 @@ class ReplaceRule {
 function ruleReplace(textEditor: TextEditor) {
     let config = vscode.workspace.getConfiguration("replacerules");
     let configRules = config.get<any>("rules");
+    let language = textEditor.document.languageId;
     let items = [];
     for (const r of configRules) {
-        if (r.name && r.find) {
+        if (r.name && r.find && (objToArray(r.languages).indexOf(language) !== -1 || !r.languages)) {
             try {
                 items.push({
                     label: "Replace Rule: " + r.name,
