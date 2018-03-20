@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.1.6
+- Add per-language support for rules
+
 ## 0.1.5
 - Code rewrite
 - Restrict rules to be applied line-by-line
