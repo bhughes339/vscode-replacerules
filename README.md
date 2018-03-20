@@ -22,8 +22,6 @@ Press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>R</kbd> and select the rule you'd like
 - `flags` - (Optional) A set of regex flags to apply to the rule. If only one set of flags is specified, it will be applied to all `finds` in the rule. The default flags are gm (global, multiline).
 - `languages` - (Optional) A set of workspace language ids that the rule is restricted to. For example, a rule with `languages` set to 'typescript' will only appear in the **Run Rule...** menu if TypeScript is the active language on the active document.
 
-**NOTE:** Due to API limitations, rules are applied to selections one line at a time. For now, newline characters (`\r` and `\n`) are not supported in find/repace strings, and the single-line mode flag (`s` flag) is not supported at all.
-
 ## Example ruleset
 
 ```json
