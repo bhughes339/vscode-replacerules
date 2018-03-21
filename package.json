@@ -92,7 +92,9 @@
                                 ],
                                 "description": "(Optional) A set of workspace language ids that the rule is restricted to. For example, a rule with 'languages' set to 'typescript' will only appear in the Run Rule... menu if TypeScript is the active language on the active document."
                             }
-                        }
+                        },
+                        "required": [ "name", "find" ],
+                        "additionalProperties": false
                     }
                 }
             }
