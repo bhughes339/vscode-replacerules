@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.1.7
+- Improve support for newlines in rules
+- Better find/replace logic
+
 ## 0.1.6
 - Add per-language support for rules
 
