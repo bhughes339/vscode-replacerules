@@ -2,11 +2,12 @@ import * as vscode from 'vscode';
 
 import { TextEditor, Range } from 'vscode';
 import Window = vscode.window;
+import Workspace = vscode.workspace;
 
 export default class ReplaceRulesEditProvider {
     private textEditor: TextEditor;
 
-    public async chooseRule() {
+    public async chooseRule(global: boolean) {
         let config = vscode.workspace.getConfiguration("replacerules");
         let configRules = config.get<any>("rules");
         let items = [];
@@ -26,7 +27,9 @@ export default class ReplaceRulesEditProvider {
         vscode.window.showQuickPick(items).then(qpItem => {
             if (!qpItem) return;
             try {
-                this.doReplace(qpItem.ruleClass);
+                global
+                    ? this.doReplaceGlobal(qpItem.ruleClass) 
+                    : this.doReplace(qpItem.ruleClass);
             } catch (err) {
                 Window.showErrorMessage('Error executing rule ' + qpItem.ruleClass.name + ': ' + err.message);
             }
@@ -66,6 +69,36 @@ export default class ReplaceRulesEditProvider {
             }
         }
         return;
+    }
+
+    private async doReplaceGlobal(rule: ReplaceRule) {
+        let edit = new vscode.WorkspaceEdit();
+        
+        Workspace.findFiles('**/*.{ts,tsx}', '**/node_modules/**').then(files => {
+            const filePromise = Promise.all(files.map(fileName => 
+                Workspace.openTextDocument(fileName).then(d => {
+                let start = d.positionAt(0);
+                let end = d.lineAt(d.lineCount - 1).range.end;
+                const replaceRange = new Range(start, end);
+    
+                let startOffset = d.offsetAt(replaceRange.start);
+                for (const r of rule.steps) {
+                    let findText = d.getText(replaceRange);
+                    let match;
+                    let findReg = new RegExp(r.find);
+                    while (match = findReg.exec(findText)) {
+                        let matchStart = startOffset + match.index;
+                        let matchRange = new Range(d.positionAt(matchStart), d.positionAt(matchStart + match[0].length));
+                        edit.replace(d.uri, matchRange, match[0].replace(r.find, r.replace));
+                    }
+                }
+            })));
+
+            filePromise.then(() => 
+                Workspace.applyEdit(edit)
+            );
+        });
+        
     }
 
     constructor(textEditor: TextEditor) {

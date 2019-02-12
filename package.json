@@ -21,7 +21,8 @@
         "regreplace"
     ],
     "activationEvents": [
-        "onCommand:extension.chooseRule"
+        "onCommand:extension.chooseRule",
+        "onCommand:extension.chooseRuleGlobal"
     ],
     "main": "./out/src/extension",
     "contributes": {
@@ -29,6 +30,11 @@
             {
                 "command": "extension.chooseRule",
                 "title": "Run Rule...",
+                "category": "Replace Rules"
+            },
+            {
+                "command": "extension.chooseRuleGlobal",
+                "title": "Run Rule Globally...",
                 "category": "Replace Rules"
             }
         ],
@@ -93,7 +99,10 @@
                                 "description": "(Optional) A set of workspace language ids that the rule is restricted to. For example, a rule with 'languages' set to 'typescript' will only appear in the Run Rule... menu if TypeScript is the active language on the active document."
                             }
                         },
-                        "required": [ "name", "find" ],
+                        "required": [
+                            "name",
+                            "find"
+                        ],
                         "additionalProperties": false
                     }
                 }
