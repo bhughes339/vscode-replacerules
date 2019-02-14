@@ -31,6 +31,11 @@
                 "command": "replacerules.chooseRule",
                 "title": "Run Rule...",
                 "category": "Replace Rules"
+            },
+            {
+                "command": "replacerules.chooseRuleSet",
+                "title": "Run Ruleset...",
+                "category": "Replace Rules"
             }
         ],
         "keybindings": [
@@ -100,6 +105,26 @@
                         }
                     },
                     "additionalProperties": false
+                },
+                "replacerules.rulesets": {
+                    "type": "object",
+                    "properties": {
+                        "/": {}
+                    },
+                    "patternProperties": {
+                        "^(.+)+$": {
+                            "type": "object",
+                            "properties": {
+                                "rules": {
+                                    "type": "array",
+                                    "minItems": 1,
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
                 },
                 "replacerules.oldrules": {
                     "type": "array",

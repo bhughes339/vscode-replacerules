@@ -5,11 +5,17 @@ import ReplaceRulesEditProvider from './editProvider';
 export function activate(context: vscode.ExtensionContext) {
     convertRules();
     context.subscriptions.push(vscode.commands.registerTextEditorCommand('replacerules.chooseRule', ruleReplace));
+    context.subscriptions.push(vscode.commands.registerTextEditorCommand('replacerules.chooseRuleSet', ruleSets));
     context.subscriptions.push(vscode.commands.registerTextEditorCommand('replacerules.runRule', runSingleRule));
 }
 
 function ruleReplace(textEditor: vscode.TextEditor) {
     new ReplaceRulesEditProvider(textEditor).chooseRule();
+    return;
+}
+
+function ruleSets(textEditor: vscode.TextEditor) {
+    new ReplaceRulesEditProvider(textEditor).chooseRuleSet();
     return;
 }
 

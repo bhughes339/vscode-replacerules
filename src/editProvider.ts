@@ -30,7 +30,44 @@ export default class ReplaceRulesEditProvider {
         });
         return;
     }
-    
+
+    public async chooseRuleSet() {
+        let configRuleSets = this.configRuleSets
+        let items = [];
+        for (const r in configRuleSets) {
+            let ruleSet = configRuleSets[r];
+            if (Array.isArray(ruleSet.rules)) {
+                try {
+                    items.push({
+                        label: r,
+                        description: "",
+                        ruleArray: ruleSet.rules
+                    });
+                } catch (err) {
+                    Window.showErrorMessage('Error parsing ruleset ' + r + ': ' + err.message);
+                }
+            }
+        }
+        vscode.window.showQuickPick(items).then(qpItem => {
+            if (!qpItem) return;
+            let configRules = this.configRules
+            let ruleObject: ReplaceRule | undefined;
+            try {
+                qpItem.ruleArray.forEach((r: string) => {
+                    if (ruleObject === undefined) {
+                        ruleObject = new ReplaceRule(configRules[r]);
+                    } else {
+                        ruleObject.appendRule(configRules[r])
+                    }
+                });
+                if (ruleObject) this.doReplace(ruleObject);
+            } catch (err) {
+                Window.showErrorMessage('Error executing ruleset ' + qpItem.label + ': ' + err.message);
+            }
+        });
+        return;
+    }
+
     public async runSingleRule(ruleName: string) {
         let rule = this.configRules[ruleName];
         if (rule) {
@@ -84,22 +121,30 @@ class Replacement {
     public replace: string;
 
     public constructor(find: string, replace: string, flags: string) {
+        if (flags) {
+            flags = (flags.search('g') === -1) ? flags + 'g' : flags;
+        }
         this.find = new RegExp(find, flags || Replacement.defaultFlags);
         this.replace = replace || '';
     }
 }
 
 class ReplaceRule {
-    public name: string | null;
     public steps: Replacement[];
 
     public constructor(rule: any) {
-        this.name = rule.name;
         let ruleSteps: Replacement[] = [];
         let find = objToArray(rule.find);
         for (let i = 0; i < find.length; i++) {
             ruleSteps.push(new Replacement(find[i], objToArray(rule.replace)[i], objToArray(rule.flags)[i]));
         }
         this.steps = ruleSteps;
+    }
+
+    public appendRule(newRule: any) {
+        let find = objToArray(newRule.find);
+        for (let i = 0; i < find.length; i++) {
+            this.steps.push(new Replacement(find[i], objToArray(newRule.replace)[i], objToArray(newRule.flags)[i]));
+        }
     }
 }
