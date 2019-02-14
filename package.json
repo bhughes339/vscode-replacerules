@@ -5,7 +5,7 @@
     "version": "0.1.7",
     "publisher": "bhughes339",
     "engines": {
-        "vscode": "^1.16.0"
+        "vscode": "^1.31.0"
     },
     "repository": {
         "type": "git",
@@ -93,7 +93,10 @@
                                 "description": "(Optional) A set of workspace language ids that the rule is restricted to. For example, a rule with 'languages' set to 'typescript' will only appear in the Run Rule... menu if TypeScript is the active language on the active document."
                             }
                         },
-                        "required": [ "name", "find" ],
+                        "required": [
+                            "name",
+                            "find"
+                        ],
                         "additionalProperties": false
                     }
                 }

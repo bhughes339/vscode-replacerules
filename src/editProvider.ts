@@ -37,31 +37,21 @@ export default class ReplaceRulesEditProvider {
     private async doReplace(rule: ReplaceRule) {
         let e = this.textEditor;
         let d = e.document;
-        let sel = e.selections;
-        let replaceRanges: Range[] = [];
-        for (const s of sel) {
-            if (!s.isEmpty) {
-                replaceRanges.push(new Range(s.start, s.end));
-            }
-        }
-        if (replaceRanges.length === 0) {
-            let start = d.positionAt(0);
-            let end = d.lineAt(d.lineCount - 1).range.end;
-            replaceRanges[0] = new Range(start, end);
-        }
         let editOptions = {undoStopBefore: false, undoStopAfter: false};
-        for (const range of replaceRanges) {
-            let startOffset = d.offsetAt(range.start);
+        let numSelections = e.selections.length;
+        for (const x of Array(numSelections).keys()) {
+            let sel = e.selections[x];
+            let range: Range;
+            if (numSelections === 1 && sel.isEmpty) {
+                range = new Range(d.positionAt(0), d.lineAt(d.lineCount - 1).range.end);
+            } else {
+                range = new Range(sel.start, sel.end);
+            }
             for (const r of rule.steps) {
                 let findText = d.getText(range);
+                findText = findText.replace(new RegExp(/\r\n/, 'g'), "\n");
                 await e.edit((edit) => {
-                    let match;
-                    let findReg = new RegExp(r.find);
-                    while (match = findReg.exec(findText)) {
-                        let matchStart = startOffset + match.index;
-                        let matchRange = new Range(d.positionAt(matchStart), d.positionAt(matchStart + match[0].length));
-                        edit.replace(matchRange, match[0].replace(r.find, r.replace));
-                    }
+                    edit.replace(range, findText.replace(r.find, r.replace));
                 }, editOptions);
             }
         }
