@@ -39,9 +39,9 @@ export default class ReplaceRulesEditProvider {
             if (Array.isArray(ruleSet.rules)) {
                 try {
                     items.push({
-                        label: r,
+                        label: "Ruleset: " + r,
                         description: "",
-                        ruleArray: ruleSet.rules
+                        ruleSetName: r
                     });
                 } catch (err) {
                     Window.showErrorMessage('Error parsing ruleset ' + r + ': ' + err.message);
@@ -49,21 +49,7 @@ export default class ReplaceRulesEditProvider {
             }
         }
         vscode.window.showQuickPick(items).then(qpItem => {
-            if (!qpItem) return;
-            let configRules = this.configRules
-            let ruleObject: ReplaceRule | undefined;
-            try {
-                qpItem.ruleArray.forEach((r: string) => {
-                    if (ruleObject === undefined) {
-                        ruleObject = new ReplaceRule(configRules[r]);
-                    } else {
-                        ruleObject.appendRule(configRules[r])
-                    }
-                });
-                if (ruleObject) this.doReplace(ruleObject);
-            } catch (err) {
-                Window.showErrorMessage('Error executing ruleset ' + qpItem.label + ': ' + err.message);
-            }
+            if (qpItem) this.runRuleSet(qpItem.ruleSetName);
         });
         return;
     }
@@ -75,6 +61,25 @@ export default class ReplaceRulesEditProvider {
                 this.doReplace(new ReplaceRule(rule));
             } catch (err) {
                 Window.showErrorMessage('Error executing rule ' + ruleName + ': ' + err.message);
+            }
+        }
+    }
+
+    public async runRuleSet(ruleSetName: string) {
+        let ruleSet = this.configRuleSets[ruleSetName];
+        if (ruleSet) {
+            let ruleObject: ReplaceRule | undefined;
+            try {
+                ruleSet.rules.forEach((r: string) => {
+                    if (ruleObject === undefined) {
+                        ruleObject = new ReplaceRule(this.configRules[r]);
+                    } else {
+                        ruleObject.appendRule(this.configRules[r])
+                    }
+                });
+                if (ruleObject) this.doReplace(ruleObject);
+            } catch (err) {
+                Window.showErrorMessage('Error executing ruleset ' + ruleSetName + ': ' + err.message);
             }
         }
     }

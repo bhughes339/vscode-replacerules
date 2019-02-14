@@ -22,7 +22,9 @@
     ],
     "activationEvents": [
         "onCommand:replacerules.chooseRule",
-        "onCommand:replacerules.runRule"
+        "onCommand:replacerules.chooseRuleSet",
+        "onCommand:replacerules.runRule",
+        "onCommand:replacerules.runRuleSet"
     ],
     "main": "./out/src/extension",
     "contributes": {

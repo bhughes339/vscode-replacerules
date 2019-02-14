@@ -7,6 +7,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerTextEditorCommand('replacerules.chooseRule', ruleReplace));
     context.subscriptions.push(vscode.commands.registerTextEditorCommand('replacerules.chooseRuleSet', ruleSets));
     context.subscriptions.push(vscode.commands.registerTextEditorCommand('replacerules.runRule', runSingleRule));
+    context.subscriptions.push(vscode.commands.registerTextEditorCommand('replacerules.runRuleSet', runRuleSet));
 }
 
 function ruleReplace(textEditor: vscode.TextEditor) {
@@ -19,9 +20,15 @@ function ruleSets(textEditor: vscode.TextEditor) {
     return;
 }
 
-function runSingleRule(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit, args: any) {
+function runSingleRule(textEditor: vscode.TextEditor, args: any) {
     let ruleName = args['ruleName'];
     new ReplaceRulesEditProvider(textEditor).runSingleRule(ruleName);
+    return;
+}
+
+function runRuleSet(textEditor: vscode.TextEditor, args: any) {
+    let ruleSet = args['ruleSet'];
+    new ReplaceRulesEditProvider(textEditor).runRuleSet(ruleSet);
     return;
 }
 
