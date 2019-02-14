@@ -55,12 +55,6 @@
                 "replacerules.rules": {
                     "type": "object",
                     "description": "Dictionary of rules for Replace Rules",
-                    "default": {
-                        "Remove trailing/leading whitespace": {
-                            "find": "^\\s*(.*)\\s*$",
-                            "replace": "$1"
-                        }
-                    },
                     "properties": {
                         "/": {}
                     },

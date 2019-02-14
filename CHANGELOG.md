@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.2.1
+- Remove default `replacerules.rules` setting
+
 ## 0.2.0
 - New format for `replacerules.rules` configuration setting
   - Any existing `replacerules.rules` will be automatically converted to the new format.
