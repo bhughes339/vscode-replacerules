@@ -33,7 +33,7 @@ Press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>R</kbd> and select the rule you'd like
 
 ## Example configuration
 
-**Note:** The configuration format has changed in version 0.2.0. Your old configs will be automatically converted to the new format. Please see release notes for more detauls.
+**Note:** The configuration format has changed in version 0.2.0. Your old configs will be automatically converted to the new format. Please see release notes for more details.
 
 ```json
 "replacerules.rules": {
