@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.2.0
+- New format for `replacerules.rules` configuration setting
+  - Any existing `replacerules.rules` will be automatically converted to the new format.
+  - The old format will be backed up to `replacerules.oldrules` in case there is any data loss during the conversion. This can be safely removed from your configurations at any time.
+- Add support for rulesets (`replacerules.rulesets`) which run multiple rules in sequence. See README for format
+- Allow specific rules and rulesets to be bound to keyboard shortcuts
+  - Rules - `{command: 'replacerules.runRule', args: ruleName: { <name of rule> }}`
+  - Rulesets - `{command: 'replacerules.runRuleSet', args: ruleSet: { <name of ruleset> }}`
+
 ## 0.1.7
 - Improve support for newlines in rules
 - Better find/replace logic

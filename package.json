@@ -2,7 +2,7 @@
     "name": "replacerules",
     "displayName": "Replace Rules",
     "description": "Create search/replace rules using Javascript regular expressions",
-    "version": "0.1.7",
+    "version": "0.2.0",
     "publisher": "bhughes339",
     "engines": {
         "vscode": "^1.31.0"
@@ -167,7 +167,7 @@
                                     "string",
                                     "array"
                                 ],
-                                "description": "(Optional) A set of workspace language ids that the rule is restricted to. For example, a rule with 'languages' set to 'typescript' will only appear in the Run Rule... menu if TypeScript is the active language on the active document."
+                                "description": "(not yet implemented) (Optional) A set of workspace language ids that the rule is restricted to. For example, a rule with 'languages' set to 'typescript' will only appear in the Run Rule... menu if TypeScript is the active language on the active document."
                             }
                         },
                         "required": [
