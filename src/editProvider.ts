@@ -5,33 +5,41 @@ import Window = vscode.window;
 
 export default class ReplaceRulesEditProvider {
     private textEditor: TextEditor;
+    private configRules: any;
+    private configRuleSets: any;
 
     public async chooseRule() {
-        let config = vscode.workspace.getConfiguration("replacerules");
-        let configRules = config.get<any>("rules");
+        let configRules = this.configRules;
         let items = [];
-        for (const r of configRules) {
-            if (r.name && r.find) {
+        for (const r in configRules) {
+            let rule = configRules[r];
+            if (rule.find) {
                 try {
                     items.push({
-                        label: "Replace Rule: " + r.name,
+                        label: "Replace Rule: " + r,
                         description: "",
-                        ruleClass: new ReplaceRule(r)
+                        ruleName: r
                     });
                 } catch (err) {
-                    Window.showErrorMessage('Error parsing rule ' + r.name + ': ' + err.message);
+                    Window.showErrorMessage('Error parsing rule ' + r + ': ' + err.message);
                 }
             }
         }
         vscode.window.showQuickPick(items).then(qpItem => {
-            if (!qpItem) return;
-            try {
-                this.doReplace(qpItem.ruleClass);
-            } catch (err) {
-                Window.showErrorMessage('Error executing rule ' + qpItem.ruleClass.name + ': ' + err.message);
-            }
+            if (qpItem) this.runSingleRule(qpItem.ruleName);
         });
         return;
+    }
+    
+    public async runSingleRule(ruleName: string) {
+        let rule = this.configRules[ruleName];
+        if (rule) {
+            try {
+                this.doReplace(new ReplaceRule(rule));
+            } catch (err) {
+                Window.showErrorMessage('Error executing rule ' + ruleName + ': ' + err.message);
+            }
+        }
     }
 
     private async doReplace(rule: ReplaceRule) {
@@ -60,6 +68,9 @@ export default class ReplaceRulesEditProvider {
 
     constructor(textEditor: TextEditor) {
         this.textEditor = textEditor;
+        let config = vscode.workspace.getConfiguration("replacerules");
+        this.configRules = config.get<any>("rules");
+        this.configRuleSets = config.get<any>("rulesets");
     }
 }
 
@@ -79,7 +90,7 @@ class Replacement {
 }
 
 class ReplaceRule {
-    public name: string;
+    public name: string | null;
     public steps: Replacement[];
 
     public constructor(rule: any) {
