@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.2.2
+- Add an extension icon
+
 ## 0.2.1
 - Remove default `replacerules.rules` setting
 
