@@ -9,10 +9,14 @@ export default class ReplaceRulesEditProvider {
     private configRuleSets: any;
 
     public async chooseRule() {
+        let language = this.textEditor.document.languageId;
         let configRules = this.configRules;
         let items = [];
         for (const r in configRules) {
             let rule = configRules[r];
+            if (Array.isArray(rule.languages) && rule.languages.indexOf(language) === -1) {
+                continue;
+            }
             if (rule.find) {
                 try {
                     items.push({
@@ -55,7 +59,11 @@ export default class ReplaceRulesEditProvider {
     }
 
     public async runSingleRule(ruleName: string) {
+        let language = this.textEditor.document.languageId;
         let rule = this.configRules[ruleName];
+        if (Array.isArray(rule.languages) && rule.languages.indexOf(language) === -1) {
+            return;
+        }
         if (rule) {
             try {
                 this.doReplace(new ReplaceRule(rule));
@@ -66,16 +74,17 @@ export default class ReplaceRulesEditProvider {
     }
 
     public async runRuleSet(ruleSetName: string) {
+        let language = this.textEditor.document.languageId;
         let ruleSet = this.configRuleSets[ruleSetName];
         if (ruleSet) {
-            let ruleObject: ReplaceRule | undefined;
+            let ruleObject = new ReplaceRule({find: ''});
             try {
                 ruleSet.rules.forEach((r: string) => {
-                    if (ruleObject === undefined) {
-                        ruleObject = new ReplaceRule(this.configRules[r]);
-                    } else {
-                        ruleObject.appendRule(this.configRules[r])
+                    let rule = this.configRules[r];
+                    if (Array.isArray(rule.languages) && rule.languages.indexOf(language) === -1) {
+                        return;
                     }
+                    ruleObject.appendRule(this.configRules[r])
                 });
                 if (ruleObject) this.doReplace(ruleObject);
             } catch (err) {
@@ -106,6 +115,14 @@ export default class ReplaceRulesEditProvider {
             }
         }
         return;
+    }
+
+    private languageCheck(rule: any) {
+        let language = this.textEditor.document.languageId;
+        if (Array.isArray(rule.languages) && rule.languages.indexOf(language) > -1) {
+            return true;
+        }
+        return false;
     }
 
     constructor(textEditor: TextEditor) {

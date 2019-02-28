@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.2.3
+- Add per-rule language filter support
+
 ## 0.2.2
 - Add an extension icon
 
