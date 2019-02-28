@@ -117,14 +117,6 @@ export default class ReplaceRulesEditProvider {
         return;
     }
 
-    private languageCheck(rule: any) {
-        let language = this.textEditor.document.languageId;
-        if (Array.isArray(rule.languages) && rule.languages.indexOf(language) > -1) {
-            return true;
-        }
-        return false;
-    }
-
     constructor(textEditor: TextEditor) {
         this.textEditor = textEditor;
         let config = vscode.workspace.getConfiguration("replacerules");
