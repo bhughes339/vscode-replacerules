@@ -20,13 +20,13 @@ function ruleSets(textEditor: vscode.TextEditor) {
     return;
 }
 
-function runSingleRule(textEditor: vscode.TextEditor, args: any) {
+function runSingleRule(textEditor: vscode.TextEditor, _edit: vscode.TextEditorEdit, args: any) {
     let ruleName = args['ruleName'];
     new ReplaceRulesEditProvider(textEditor).runSingleRule(ruleName);
     return;
 }
 
-function runRuleSet(textEditor: vscode.TextEditor, args: any) {
+function runRuleSet(textEditor: vscode.TextEditor, _edit: vscode.TextEditorEdit, args: any) {
     let ruleSet = args['ruleSet'];
     new ReplaceRulesEditProvider(textEditor).runRuleSet(ruleSet);
     return;

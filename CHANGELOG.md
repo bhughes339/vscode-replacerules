@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.2.4
+- Fix keybinding support for rules
+
 ## 0.2.3
 - Add per-rule language filter support
 

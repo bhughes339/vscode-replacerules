@@ -2,10 +2,10 @@
     "name": "replacerules",
     "displayName": "Replace Rules",
     "description": "Create search/replace rules using Javascript regular expressions",
-    "version": "0.2.3",
+    "version": "0.2.4",
     "publisher": "bhughes339",
     "engines": {
-        "vscode": "^1.31.0"
+        "vscode": "^1.33.0"
     },
     "repository": {
         "type": "git",

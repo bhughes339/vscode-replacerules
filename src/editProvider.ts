@@ -59,12 +59,12 @@ export default class ReplaceRulesEditProvider {
     }
 
     public async runSingleRule(ruleName: string) {
-        let language = this.textEditor.document.languageId;
         let rule = this.configRules[ruleName];
-        if (Array.isArray(rule.languages) && rule.languages.indexOf(language) === -1) {
-            return;
-        }
         if (rule) {
+            let language = this.textEditor.document.languageId;
+            if (Array.isArray(rule.languages) && rule.languages.indexOf(language) === -1) {
+                return;
+            }
             try {
                 this.doReplace(new ReplaceRule(rule));
             } catch (err) {
@@ -81,10 +81,12 @@ export default class ReplaceRulesEditProvider {
             try {
                 ruleSet.rules.forEach((r: string) => {
                     let rule = this.configRules[r];
-                    if (Array.isArray(rule.languages) && rule.languages.indexOf(language) === -1) {
-                        return;
+                    if (rule) {
+                        if (Array.isArray(rule.languages) && rule.languages.indexOf(language) === -1) {
+                            return;
+                        }
+                        ruleObject.appendRule(this.configRules[r])
                     }
-                    ruleObject.appendRule(this.configRules[r])
                 });
                 if (ruleObject) this.doReplace(ruleObject);
             } catch (err) {
