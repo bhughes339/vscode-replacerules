@@ -50,7 +50,7 @@ Press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>R</kbd> and select the rule you'd like
     }
 }
 
-"replacerules.ruleSets": {
+"replacerules.rulesets": {
     "Remove lots of stuff": {
         "rules": [
             "Remove trailing and leading whitespace",
