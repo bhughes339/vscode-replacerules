@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.2.6
+- Combine vscode commands
+  - This fixes the keybinding linter not recognizing the `runRule` and `runRuleset` commands
+
 ## 0.2.5
 - Replace all instances of "ruleSet" to "ruleset"
 
