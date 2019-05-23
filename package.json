@@ -22,8 +22,6 @@
         "regreplace"
     ],
     "activationEvents": [
-        "onCommand:replacerules.chooseRule",
-        "onCommand:replacerules.chooseRuleset",
         "onCommand:replacerules.runRule",
         "onCommand:replacerules.runRuleset"
     ],
