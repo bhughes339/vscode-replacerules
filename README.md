@@ -80,10 +80,10 @@ Ruleset:
 ```json
 {
     "key": "ctrl+shift+]",
-    "command": "replacerules.runRuleSet",
+    "command": "replacerules.runRuleset",
     "when": "editorTextFocus && !editorReadonly",
     "args": {
-        "ruleSet": "Remove lots of stuff"
+        "rulesetName": "Remove lots of stuff"
     }
 }
 ```

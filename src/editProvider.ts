@@ -6,7 +6,7 @@ import Window = vscode.window;
 export default class ReplaceRulesEditProvider {
     private textEditor: TextEditor;
     private configRules: any;
-    private configRuleSets: any;
+    private configRulesets: any;
 
     public async chooseRule() {
         let language = this.textEditor.document.languageId;
@@ -35,17 +35,17 @@ export default class ReplaceRulesEditProvider {
         return;
     }
 
-    public async chooseRuleSet() {
-        let configRuleSets = this.configRuleSets
+    public async chooseRuleset() {
+        let configRulesets = this.configRulesets
         let items = [];
-        for (const r in configRuleSets) {
-            let ruleSet = configRuleSets[r];
-            if (Array.isArray(ruleSet.rules)) {
+        for (const r in configRulesets) {
+            let ruleset = configRulesets[r];
+            if (Array.isArray(ruleset.rules)) {
                 try {
                     items.push({
                         label: "Ruleset: " + r,
                         description: "",
-                        ruleSetName: r
+                        rulesetName: r
                     });
                 } catch (err) {
                     Window.showErrorMessage('Error parsing ruleset ' + r + ': ' + err.message);
@@ -53,7 +53,7 @@ export default class ReplaceRulesEditProvider {
             }
         }
         vscode.window.showQuickPick(items).then(qpItem => {
-            if (qpItem) this.runRuleSet(qpItem.ruleSetName);
+            if (qpItem) this.runRuleset(qpItem.rulesetName);
         });
         return;
     }
@@ -73,13 +73,13 @@ export default class ReplaceRulesEditProvider {
         }
     }
 
-    public async runRuleSet(ruleSetName: string) {
+    public async runRuleset(rulesetName: string) {
         let language = this.textEditor.document.languageId;
-        let ruleSet = this.configRuleSets[ruleSetName];
-        if (ruleSet) {
+        let ruleset = this.configRulesets[rulesetName];
+        if (ruleset) {
             let ruleObject = new ReplaceRule({find: ''});
             try {
-                ruleSet.rules.forEach((r: string) => {
+                ruleset.rules.forEach((r: string) => {
                     let rule = this.configRules[r];
                     if (rule) {
                         if (Array.isArray(rule.languages) && rule.languages.indexOf(language) === -1) {
@@ -90,7 +90,7 @@ export default class ReplaceRulesEditProvider {
                 });
                 if (ruleObject) this.doReplace(ruleObject);
             } catch (err) {
-                Window.showErrorMessage('Error executing ruleset ' + ruleSetName + ': ' + err.message);
+                Window.showErrorMessage('Error executing ruleset ' + rulesetName + ': ' + err.message);
             }
         }
     }
@@ -123,7 +123,7 @@ export default class ReplaceRulesEditProvider {
         this.textEditor = textEditor;
         let config = vscode.workspace.getConfiguration("replacerules");
         this.configRules = config.get<any>("rules");
-        this.configRuleSets = config.get<any>("rulesets");
+        this.configRulesets = config.get<any>("rulesets");
     }
 }
 

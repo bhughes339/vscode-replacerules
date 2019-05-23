@@ -5,9 +5,9 @@ import ReplaceRulesEditProvider from './editProvider';
 export function activate(context: vscode.ExtensionContext) {
     convertRules();
     context.subscriptions.push(vscode.commands.registerTextEditorCommand('replacerules.chooseRule', ruleReplace));
-    context.subscriptions.push(vscode.commands.registerTextEditorCommand('replacerules.chooseRuleSet', ruleSets));
+    context.subscriptions.push(vscode.commands.registerTextEditorCommand('replacerules.chooseRuleset', rulesets));
     context.subscriptions.push(vscode.commands.registerTextEditorCommand('replacerules.runRule', runSingleRule));
-    context.subscriptions.push(vscode.commands.registerTextEditorCommand('replacerules.runRuleSet', runRuleSet));
+    context.subscriptions.push(vscode.commands.registerTextEditorCommand('replacerules.runRuleset', runRuleset));
 }
 
 function ruleReplace(textEditor: vscode.TextEditor) {
@@ -15,8 +15,8 @@ function ruleReplace(textEditor: vscode.TextEditor) {
     return;
 }
 
-function ruleSets(textEditor: vscode.TextEditor) {
-    new ReplaceRulesEditProvider(textEditor).chooseRuleSet();
+function rulesets(textEditor: vscode.TextEditor) {
+    new ReplaceRulesEditProvider(textEditor).chooseRuleset();
     return;
 }
 
@@ -26,9 +26,9 @@ function runSingleRule(textEditor: vscode.TextEditor, _edit: vscode.TextEditorEd
     return;
 }
 
-function runRuleSet(textEditor: vscode.TextEditor, _edit: vscode.TextEditorEdit, args: any) {
-    let ruleSet = args['ruleSet'];
-    new ReplaceRulesEditProvider(textEditor).runRuleSet(ruleSet);
+function runRuleset(textEditor: vscode.TextEditor, _edit: vscode.TextEditorEdit, args: any) {
+    let ruleset = args['rulesetName'];
+    new ReplaceRulesEditProvider(textEditor).runRuleset(ruleset);
     return;
 }
 

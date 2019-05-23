@@ -23,9 +23,9 @@
     ],
     "activationEvents": [
         "onCommand:replacerules.chooseRule",
-        "onCommand:replacerules.chooseRuleSet",
+        "onCommand:replacerules.chooseRuleset",
         "onCommand:replacerules.runRule",
-        "onCommand:replacerules.runRuleSet"
+        "onCommand:replacerules.runRuleset"
     ],
     "main": "./out/src/extension",
     "contributes": {
@@ -36,7 +36,7 @@
                 "category": "Replace Rules"
             },
             {
-                "command": "replacerules.chooseRuleSet",
+                "command": "replacerules.chooseRuleset",
                 "title": "Run Ruleset...",
                 "category": "Replace Rules"
             }
