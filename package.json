@@ -31,19 +31,19 @@
     "contributes": {
         "commands": [
             {
-                "command": "replacerules.chooseRule",
+                "command": "replacerules.runRule",
                 "title": "Run Rule...",
                 "category": "Replace Rules"
             },
             {
-                "command": "replacerules.chooseRuleset",
+                "command": "replacerules.runRuleset",
                 "title": "Run Ruleset...",
                 "category": "Replace Rules"
             }
         ],
         "keybindings": [
             {
-                "command": "replacerules.chooseRule",
+                "command": "replacerules.runRule",
                 "key": "ctrl+alt+r",
                 "mac": "cmd+alt+r",
                 "when": "editorTextFocus"
