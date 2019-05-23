@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.2.5
+- Replace all instances of "ruleSet" to "ruleset"
+
 ## 0.2.4
 - Fix keybinding support for rules
 
