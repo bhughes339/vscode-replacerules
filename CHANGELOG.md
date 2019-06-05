@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.2.7
+- Fix selection changing between ruleset edits
+
 ## 0.2.6
 - Combine vscode commands
   - This fixes the keybinding linter not recognizing the `runRule` and `runRuleset` commands
