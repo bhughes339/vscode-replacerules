@@ -102,18 +102,14 @@ export default class ReplaceRulesEditProvider {
         let numSelections = e.selections.length;
         for (const x of Array(numSelections).keys()) {
             let sel = e.selections[x];
-            let range: Range;
-            if (numSelections === 1 && sel.isEmpty) {
-                range = new Range(d.positionAt(0), d.lineAt(d.lineCount - 1).range.end);
-            } else {
-                range = new Range(sel.start, sel.end);
-            }
+            let index = (numSelections === 1 && sel.isEmpty) ? -1 : x;
+            let range = rangeUpdate(e, d, index);
             for (const r of rule.steps) {
-                let findText = d.getText(range);
-                findText = findText.replace(new RegExp(/\r\n/, 'g'), "\n");
+                let findText = d.getText(range).replace(new RegExp(/\r\n/, 'g'), "\n");
                 await e.edit((edit) => {
                     edit.replace(range, findText.replace(r.find, r.replace));
                 }, editOptions);
+                range = rangeUpdate(e, d, index);
             }
         }
         return;
@@ -129,6 +125,15 @@ export default class ReplaceRulesEditProvider {
 
 const objToArray = (obj: any) => {
     return (Array.isArray(obj)) ? obj : Array(obj);
+}
+
+const rangeUpdate = (e: TextEditor, d: vscode.TextDocument, index: number) => {
+    if (index === -1) {
+        return new Range(d.positionAt(0), d.lineAt(d.lineCount - 1).range.end)
+    } else {
+        let sel = e.selections[index];
+        return new Range(sel.start, sel.end);
+    }
 }
 
 class Replacement {
