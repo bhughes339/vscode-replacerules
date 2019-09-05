@@ -145,7 +145,7 @@ class Replacement {
         if (flags) {
             flags = (flags.search('g') === -1) ? flags + 'g' : flags;
         }
-        this.find = new RegExp(find, flags || Replacement.defaultFlags);
+        this.find = literal ? find : (new RegExp(find, flags || Replacement.defaultFlags));
         this.replace = replace || '';
     }
 }
@@ -157,7 +157,7 @@ class ReplaceRule {
         let ruleSteps: Replacement[] = [];
         let find = objToArray(rule.find);
         for (let i = 0; i < find.length; i++) {
-            ruleSteps.push(new Replacement(find[i], objToArray(rule.replace)[i], objToArray(rule.flags)[i]));
+            ruleSteps.push(new Replacement(find[i], objToArray(rule.replace)[i], objToArray(rule.flags)[i],objToArray(rule.literal)[i]));
         }
         this.steps = ruleSteps;
     }
@@ -165,7 +165,7 @@ class ReplaceRule {
     public appendRule(newRule: any) {
         let find = objToArray(newRule.find);
         for (let i = 0; i < find.length; i++) {
-            this.steps.push(new Replacement(find[i], objToArray(newRule.replace)[i], objToArray(newRule.flags)[i]));
+            this.steps.push(new Replacement(find[i], objToArray(newRule.replace)[i], objToArray(newRule.flags)[i], objToArray(rule.literal)[i]));
         }
     }
 }
