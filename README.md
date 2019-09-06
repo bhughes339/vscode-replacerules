@@ -9,8 +9,8 @@ Replace Rules uses Javascript regular expressions for searching and replacing. S
 Inspired by the Sublime Text plugin [RegReplace](https://github.com/facelessuser/RegReplace).
 
 ## Getting started
-
-Press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>R</kbd> and select the rule you'd like to run across your selection or document. Alternatively, open the Command Palette (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>) and select **Replace Rules: Run Rule...**
+1) Add the rules you want to use in your `settings.json` (open the Command Palette and select `Preferences: open settings (JSON)`)
+2) Press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>R</kbd> and select the rule you'd like to run across your selection or document. Alternatively, open the Command Palette (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>) and select **Replace Rules: Run Rule...**
 
 ## Configuration options
 
