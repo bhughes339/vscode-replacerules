@@ -48,6 +48,11 @@ Press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>R</kbd> and select the rule you'd like
             "typescript"
         ]
     }
+    "Replace ligatures": {
+      "find": ["ﬀ","ﬃ","ﬄ","ﬁ","ﬂ","ﬅ"],
+      "replace": ["ff","ffi","ffl","fi","fl","ft"]
+    }
+  }
 }
 
 "replacerules.rulesets": {
