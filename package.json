@@ -54,11 +54,8 @@
                 "replacerules.rules": {
                     "type": "object",
                     "description": "Dictionary of rules for Replace Rules",
-                    "properties": {
-                        "/": {}
-                    },
                     "patternProperties": {
-                        "^(.+)+$": {
+                        "^(.+)$": {
                             "type": "object",
                             "properties": {
                                 "find": {
@@ -100,15 +97,14 @@
                 },
                 "replacerules.rulesets": {
                     "type": "object",
-                    "properties": {
-                        "/": {}
-                    },
+                    "description": "Dictionary of rulesets for Replace Rules",
                     "patternProperties": {
-                        "^(.+)+$": {
+                        "^(.+)$": {
                             "type": "object",
                             "properties": {
                                 "rules": {
                                     "type": "array",
+                                    "description": "List of rules defined in replacerules.rules to run sequentially.",
                                     "minItems": 1,
                                     "items": {
                                         "type": "string"
@@ -120,7 +116,7 @@
                 },
                 "replacerules.oldrules": {
                     "type": "array",
-                    "description": "Dictionary of rulesets for Replace Rules",
+                    "description": "(Obsolete) Dictionary of rules for Replace Rules",
                     "items": {
                         "type": "object",
                         "properties": {
