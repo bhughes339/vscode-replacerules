@@ -106,9 +106,14 @@ export default class ReplaceRulesEditProvider {
             let range = rangeUpdate(e, d, index);
             for (const r of rule.steps) {
                 let findText = d.getText(range).replace(new RegExp(/\r\n/, 'g'), "\n");
-                await e.edit((edit) => {
-                    edit.replace(range, findText.replace(r.find, r.replace));
-                }, editOptions);
+                let replaceText = findText.replace(r.find, r.replace);
+                while (findText != replaceText) {
+                    await e.edit((edit) => {
+                        edit.replace(range, findText.replace(r.find, r.replace));
+                    }, editOptions);
+                    findText = replaceText;
+                    replaceText = findText.replace(r.find, r.replace);
+                }
                 range = rangeUpdate(e, d, index);
             }
         }
@@ -138,10 +143,10 @@ const rangeUpdate = (e: TextEditor, d: vscode.TextDocument, index: number) => {
 
 class Replacement {
     static defaultFlags = 'gm';
-    public find: RegExp;
+    public find: RegExp | string;
     public replace: string;
 
-    public constructor(find: string, replace: string, flags: string) {
+    public constructor(find: string, replace: string, flags: string, literal = false) {
         if (flags) {
             flags = (flags.search('g') === -1) ? flags + 'g' : flags;
         }
@@ -157,7 +162,7 @@ class ReplaceRule {
         let ruleSteps: Replacement[] = [];
         let find = objToArray(rule.find);
         for (let i = 0; i < find.length; i++) {
-            ruleSteps.push(new Replacement(find[i], objToArray(rule.replace)[i], objToArray(rule.flags)[i],objToArray(rule.literal)[i]));
+            ruleSteps.push(new Replacement(find[i], objToArray(rule.replace)[i], objToArray(rule.flags)[i], rule.literal));
         }
         this.steps = ruleSteps;
     }
@@ -165,7 +170,7 @@ class ReplaceRule {
     public appendRule(newRule: any) {
         let find = objToArray(newRule.find);
         for (let i = 0; i < find.length; i++) {
-            this.steps.push(new Replacement(find[i], objToArray(newRule.replace)[i], objToArray(newRule.flags)[i], objToArray(rule.literal)[i]));
+            this.steps.push(new Replacement(find[i], objToArray(newRule.replace)[i], objToArray(newRule.flags)[i], newRule.literal));
         }
     }
 }
