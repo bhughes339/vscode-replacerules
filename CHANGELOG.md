@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.3.0
+- Add support for literal search/replace
+
 ## 0.2.7
 - Fix selection changing between ruleset edits
 
