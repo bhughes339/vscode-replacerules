@@ -106,14 +106,9 @@ export default class ReplaceRulesEditProvider {
             let range = rangeUpdate(e, d, index);
             for (const r of rule.steps) {
                 let findText = d.getText(range).replace(new RegExp(/\r\n/, 'g'), "\n");
-                let replaceText = findText.replace(r.find, r.replace);
-                while (findText != replaceText) {
-                    await e.edit((edit) => {
-                        edit.replace(range, findText.replace(r.find, r.replace));
-                    }, editOptions);
-                    findText = replaceText;
-                    replaceText = findText.replace(r.find, r.replace);
-                }
+                await e.edit((edit) => {
+                    edit.replace(range, findText.replace(r.find, r.replace));
+                }, editOptions);
                 range = rangeUpdate(e, d, index);
             }
         }
@@ -150,7 +145,8 @@ class Replacement {
         if (flags) {
             flags = (flags.search('g') === -1) ? flags + 'g' : flags;
         }
-        this.find = literal ? find : (new RegExp(find, flags || Replacement.defaultFlags));
+        find = literal ? escapeRegExp(find) : find;
+        this.find = new RegExp(find, flags || Replacement.defaultFlags);
         this.replace = replace || '';
     }
 }
@@ -173,4 +169,9 @@ class ReplaceRule {
             this.steps.push(new Replacement(find[i], objToArray(newRule.replace)[i], objToArray(newRule.flags)[i], newRule.literal));
         }
     }
+}
+
+// From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Escaping
+function escapeRegExp(string: string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
