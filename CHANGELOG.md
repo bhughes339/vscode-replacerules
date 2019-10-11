@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.3.1
+- Fix literal search/replace breaking certain find patterns
+
 ## 0.3.0
 - Add support for literal search/replace
 
