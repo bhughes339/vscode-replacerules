@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Replace Rules Conversion</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script type=text/javascript>
+    function convert() {
+        var trimmed = document.getElementById("oldrules").value.replace(/\s*"replacerules.rules"\s*:\s+/, "");
+        var data = JSON.parse(trimmed);
+        var newRules = oldRulesToNew(data);
+        document.getElementById("newrules").value = "\"replacerules.rules\": " + JSON.stringify(newRules, null, 4); 
+    }
+    function oldRulesToNew(ruleObj) {
+        let newRules = {};
+        for (const r of ruleObj) {
+            let ruleName = (r.name) ? r.name : "Replace Rule";
+            newRules[ruleName] = r;
+            delete newRules[ruleName].name;
+        }
+        return newRules;
+    }
+    </script>
+    <style>
+        textarea { width: 500px; height: 200px; }
+    </style>
+</head>
+<body>
+    <textarea id="oldrules" placeholder="Paste replacerules.rules object from settings.json"></textarea>
+    <button id="convert" onclick="convert()">Convert rules</button><br/>
+    <p>New replacerules.rules object:</p>
+    <textarea id="newrules" readonly></textarea>
+</body>
+</html>
