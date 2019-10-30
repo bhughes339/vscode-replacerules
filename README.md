@@ -34,7 +34,7 @@ Press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>R</kbd> and select the rule you'd like
 
 ## Example configuration
 
-**Note:** The configuration format has changed in version 0.2.0. Your old configs will be automatically converted to the new format. Please see release notes for more details.
+**Note:** The Replace Rules configuration object format changed in version 0.2.0. If you encounter issues with rules not loading and have not used the extension since the format change, use [this tool](https://bhughes339.github.io/vscode-replacerules/convert.html) to convert your rules object to the new format.
 
 ```json
 "replacerules.rules": {
