@@ -23,7 +23,8 @@
     ],
     "activationEvents": [
         "onCommand:replacerules.runRule",
-        "onCommand:replacerules.runRuleset"
+        "onCommand:replacerules.runRuleset",
+        "onCommand:replacerules.pasteAndReplace"
     ],
     "main": "./out/src/extension",
     "contributes": {
@@ -37,6 +38,11 @@
                 "command": "replacerules.runRuleset",
                 "title": "Run Ruleset...",
                 "category": "Replace Rules"
+            },
+            {
+                "command": "replacerules.pasteAndReplace",
+                "title": "Run Replace Rule on clipboard and paste...",
+                "category": "Replace Rules"
             }
         ],
         "keybindings": [
@@ -44,6 +50,12 @@
                 "command": "replacerules.runRule",
                 "key": "ctrl+alt+r",
                 "mac": "cmd+alt+r",
+                "when": "editorTextFocus"
+            },
+            {
+                "command": "replacerules.pasteAndReplace",
+                "key": "ctrl+alt+v",
+                "mac": "cmd+alt+v",
                 "when": "editorTextFocus"
             }
         ],

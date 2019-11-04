@@ -88,3 +88,25 @@ Ruleset:
     }
 }
 ```
+
+Clipboard Replace:
+```json
+{
+    "key": "ctrl+shift+]",
+    "command": "replacerules.pasteAndReplace",
+    "when": "editorTextFocus && !editorReadonly",
+    "args": {
+        "ruleName": "Remove trailing and leading whitespace"
+    }
+}
+```
+
+## Other features
+
+### Replace clipboard and paste
+
+Run a Replace Rule on the clipboard's current contents and pastes the new text into the document. Does not modify the clipboard contents.
+
+- Command palette: **Run Replace Rule on clipboard and paste...**
+- Keyboard shortcut: <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>V</kbd>
+  - Additionally, custom keyboard shortcuts can be added to run a specific rule on the clipboard and paste. See the "Clipboard Replace" section under "Keyboard Shortcuts" above.

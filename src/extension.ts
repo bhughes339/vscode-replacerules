@@ -5,24 +5,38 @@ import ReplaceRulesEditProvider from './editProvider';
 export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerTextEditorCommand('replacerules.runRule', runSingleRule));
     context.subscriptions.push(vscode.commands.registerTextEditorCommand('replacerules.runRuleset', runRuleset));
+    context.subscriptions.push(vscode.commands.registerTextEditorCommand('replacerules.pasteAndReplace', pasteReplace));
 }
 
 function runSingleRule(textEditor: vscode.TextEditor, _edit: vscode.TextEditorEdit, args?: any) {
+    let editP = new ReplaceRulesEditProvider(textEditor);
     if (args) {
         let ruleName = args['ruleName'];
-        new ReplaceRulesEditProvider(textEditor).runSingleRule(ruleName);
+        editP.runSingleRule(ruleName);
     } else {
-        new ReplaceRulesEditProvider(textEditor).chooseRule();
+        editP.pickRuleAndRun();
     }
     return;
 }
 
 function runRuleset(textEditor: vscode.TextEditor, _edit: vscode.TextEditorEdit, args?: any) {
+    let editP = new ReplaceRulesEditProvider(textEditor);
     if (args) {
         let rulesetName = args['rulesetName'];
-        new ReplaceRulesEditProvider(textEditor).runRuleset(rulesetName);
+        editP.runRuleset(rulesetName);
     } else {
-        new ReplaceRulesEditProvider(textEditor).chooseRuleset();
+        editP.pickRulesetAndRun();
+    }
+    return;
+}
+
+function pasteReplace(textEditor: vscode.TextEditor, _edit: vscode.TextEditorEdit, args?: any) {
+    let editP = new ReplaceRulesEditProvider(textEditor);
+    if (args) {
+        let ruleName = args['ruleName'];
+        editP.pasteReplace(ruleName);
+    } else {
+        editP.pickRuleAndPaste();
     }
     return;
 }
