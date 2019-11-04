@@ -8,7 +8,28 @@ export default class ReplaceRulesEditProvider {
     private configRules: any;
     private configRulesets: any;
 
-    public async chooseRule() {
+    public pickRuleAndRun() {
+        let rules = this.getQPRules();
+        vscode.window.showQuickPick(rules).then(qpItem => {
+            if (qpItem) this.runSingleRule(qpItem.key);
+        });
+    }
+
+    public pickRulesetAndRun() {
+        let rulesets = this.getQPRulesets();
+        vscode.window.showQuickPick(rulesets).then(qpItem => {
+            if (qpItem) this.runRuleset(qpItem.key);
+        });
+    }
+
+    public pickRuleAndPaste() {
+        let rules = this.getQPRules();
+        vscode.window.showQuickPick(rules).then(qpItem => {
+            if (qpItem) this.pasteReplace(qpItem.key);
+        });
+    }
+
+    private getQPRules(): any[] {
         let language = this.textEditor.document.languageId;
         let configRules = this.configRules;
         let items = [];
@@ -22,21 +43,18 @@ export default class ReplaceRulesEditProvider {
                     items.push({
                         label: "Replace Rule: " + r,
                         description: "",
-                        ruleName: r
+                        key: r
                     });
                 } catch (err) {
                     Window.showErrorMessage('Error parsing rule ' + r + ': ' + err.message);
                 }
             }
         }
-        vscode.window.showQuickPick(items).then(qpItem => {
-            if (qpItem) this.runSingleRule(qpItem.ruleName);
-        });
-        return;
+        return items;
     }
 
-    public async chooseRuleset() {
-        let configRulesets = this.configRulesets
+    private getQPRulesets(): any[] {
+        let configRulesets = this.configRulesets;
         let items = [];
         for (const r in configRulesets) {
             let ruleset = configRulesets[r];
@@ -45,20 +63,17 @@ export default class ReplaceRulesEditProvider {
                     items.push({
                         label: "Ruleset: " + r,
                         description: "",
-                        rulesetName: r
+                        key: r
                     });
                 } catch (err) {
                     Window.showErrorMessage('Error parsing ruleset ' + r + ': ' + err.message);
                 }
             }
         }
-        vscode.window.showQuickPick(items).then(qpItem => {
-            if (qpItem) this.runRuleset(qpItem.rulesetName);
-        });
-        return;
+        return items;
     }
 
-    public async runSingleRule(ruleName: string) {
+    public runSingleRule(ruleName: string) {
         let rule = this.configRules[ruleName];
         if (rule) {
             let language = this.textEditor.document.languageId;
@@ -73,7 +88,7 @@ export default class ReplaceRulesEditProvider {
         }
     }
 
-    public async runRuleset(rulesetName: string) {
+    public runRuleset(rulesetName: string) {
         let language = this.textEditor.document.languageId;
         let ruleset = this.configRulesets[rulesetName];
         if (ruleset) {
@@ -95,6 +110,21 @@ export default class ReplaceRulesEditProvider {
         }
     }
 
+    public pasteReplace(ruleName: string) {
+        let rule = this.configRules[ruleName];
+        if (rule) {
+            let language = this.textEditor.document.languageId;
+            if (Array.isArray(rule.languages) && rule.languages.indexOf(language) === -1) {
+                return;
+            }
+            try {
+                this.doPasteReplace(new ReplaceRule(rule));
+            } catch (err) {
+                Window.showErrorMessage('Error executing rule ' + ruleName + ': ' + err.message);
+            }
+        }
+    }
+
     private async doReplace(rule: ReplaceRule) {
         let e = this.textEditor;
         let d = e.document;
@@ -105,7 +135,7 @@ export default class ReplaceRulesEditProvider {
             let index = (numSelections === 1 && sel.isEmpty) ? -1 : x;
             let range = rangeUpdate(e, d, index);
             for (const r of rule.steps) {
-                let findText = d.getText(range).replace(new RegExp(/\r\n/, 'g'), "\n");
+                let findText = stripCR(d.getText(range));
                 await e.edit((edit) => {
                     edit.replace(range, findText.replace(r.find, r.replace));
                 }, editOptions);
@@ -115,24 +145,26 @@ export default class ReplaceRulesEditProvider {
         return;
     }
 
+    private async doPasteReplace(rule: ReplaceRule) {
+        let e = this.textEditor;
+        let editOptions = {undoStopBefore: false, undoStopAfter: false};
+        let clip = stripCR(await vscode.env.clipboard.readText());
+        for (const r of rule.steps) {
+            clip = clip.replace(r.find, r.replace);
+        }
+        await e.edit((edit) => {
+            for (const x of e.selections) {
+                edit.replace(new Range(x.start, x.end), clip);
+            }
+        }, editOptions);
+        return;
+    }
+
     constructor(textEditor: TextEditor) {
         this.textEditor = textEditor;
         let config = vscode.workspace.getConfiguration("replacerules");
         this.configRules = config.get<any>("rules");
         this.configRulesets = config.get<any>("rulesets");
-    }
-}
-
-const objToArray = (obj: any) => {
-    return (Array.isArray(obj)) ? obj : Array(obj);
-}
-
-const rangeUpdate = (e: TextEditor, d: vscode.TextDocument, index: number) => {
-    if (index === -1) {
-        return new Range(d.positionAt(0), d.lineAt(d.lineCount - 1).range.end)
-    } else {
-        let sel = e.selections[index];
-        return new Range(sel.start, sel.end);
     }
 }
 
@@ -169,6 +201,23 @@ class ReplaceRule {
             this.steps.push(new Replacement(find[i], objToArray(newRule.replace)[i], objToArray(newRule.flags)[i], newRule.literal));
         }
     }
+}
+
+const objToArray = (obj: any) => {
+    return (Array.isArray(obj)) ? obj : Array(obj);
+}
+
+const rangeUpdate = (e: TextEditor, d: vscode.TextDocument, index: number) => {
+    if (index === -1) {
+        return new Range(d.positionAt(0), d.lineAt(d.lineCount - 1).range.end)
+    } else {
+        let sel = e.selections[index];
+        return new Range(sel.start, sel.end);
+    }
+}
+
+const stripCR = (str: string) => {
+    return str.replace(new RegExp(/\r\n/, 'g'), '\n');
 }
 
 // From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Escaping
