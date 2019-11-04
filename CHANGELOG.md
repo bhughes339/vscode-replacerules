@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.4.0
+- New feature: Run rule on clipboard and paste into document (replacerules.pasteAndReplace)
+  - Details in the new "Other Features" section in README
+- Retire rules object conversion code and add github.io page for additional conversions
+- Change code for improved readability and efficiency
+
 ## 0.3.1
 - Fix literal search/replace breaking certain find patterns
 
