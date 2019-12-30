@@ -2,9 +2,9 @@
 
 [![Version](https://vsmarketplacebadge.apphb.com/version/bhughes339.replacerules.svg)](https://marketplace.visualstudio.com/items?itemName=bhughes339.replacerules)
 
-Create search/replace rules. A "rule" is one or more search/replace patterns that can be applied to a selection of text (or the entire document).
+Create search/replace rules. A "rule" is one or more search/replace patterns that can be applied to the entire document, or one or more selections of text.
 
-Replace Rules uses Javascript regular expressions for searching and replacing. Some features, such as lookbehind (e.g. `(?<=)`), are not supported in Javascript regex. [Click here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions) for a quick primer on Javascript regex.
+Replace Rules uses JavaScript regular expressions for searching and replacing. [Click here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions) for an overview of JavaScript RegEx.
 
 Inspired by the Sublime Text plugin [RegReplace](https://github.com/facelessuser/RegReplace).
 
@@ -16,14 +16,14 @@ Press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>R</kbd> and select the rule you'd like
 
 ### Rules
 
-`replacerules.rules` is a dictionary of objects, each of which represents a single search/replace rule. A rule consists of the following components:
+`replacerules.rules` is a dictionary of objects, each of which represents a single find/replace rule. A rule consists of the following components:
 
 - Object key - (Required) The description of the rule that will appear in the command palette.
 - `find` - (Required) A sequence of regular expressions to be searched on. Can be a single string or an array of strings.
-- `replace` - (Optional) A sequence of regular expressions used as replacements. Can be a single string or an array of strings. If this is an empty string or unspecified, each `find` will be deleted rather than replaced.
-- `flags` - (Optional) A set of regex flags to apply to the rule. If only one set of flags is specified, it will be applied to all `finds` in the rule. The default flags are gm (global, multiline).
-- `languages` - (Optional) An array of workspace language ids that the rule is restricted to. For example, a rule with `languages` set to 'typescript' will only appear in the **Run Rule...** menu if TypeScript is the active language on the active document.
-- `literal` - (Optional) Perform a non-regex, literal search and replace.
+- `replace` - (Optional) A sequence of regular expressions used as replacements. Can be a single string or an array of strings. If this is an empty string or unspecified, each instance of `find` will be deleted.
+- `flags` - (Optional) A set of RegEx flags to apply to the rule. If only one set of flags is specified, it will be applied to all `finds` in the rule. The default flags are "gm" (global, multi-line). A list of compatible flags can be found [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Advanced_searching_with_flags).
+- `languages` - (Optional) An array of workspace language ids that the rule is restricted to. For example, a rule with `languages` set to 'typescript' will only appear in the **Run Rule...** menu if TypeScript is the selected language for the active document.
+- `literal` - (Optional) Perform a non-RegEx, literal search and replace.
 
 ### Rulesets
 
