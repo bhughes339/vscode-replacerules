@@ -2,7 +2,7 @@
     "name": "replacerules",
     "displayName": "Replace Rules",
     "description": "Create search/replace rules using Javascript regular expressions",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "publisher": "bhughes339",
     "engines": {
         "vscode": "^1.33.0"
