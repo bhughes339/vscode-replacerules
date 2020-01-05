@@ -24,7 +24,8 @@
     "activationEvents": [
         "onCommand:replacerules.runRule",
         "onCommand:replacerules.runRuleset",
-        "onCommand:replacerules.pasteAndReplace"
+        "onCommand:replacerules.pasteAndReplace",
+        "onCommand:replacerules.stringifyRegex"
     ],
     "main": "./out/src/extension",
     "contributes": {
@@ -42,6 +43,11 @@
             {
                 "command": "replacerules.pasteAndReplace",
                 "title": "Run Replace Rule on clipboard and paste...",
+                "category": "Replace Rules"
+            },
+            {
+                "command": "replacerules.stringifyRegex",
+                "title": "Stringify regular expression",
                 "category": "Replace Rules"
             }
         ],

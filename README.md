@@ -107,6 +107,12 @@ Clipboard Replace:
 
 Run a Replace Rule on the clipboard's current contents and pastes the new text into the document. Does not modify the clipboard contents.
 
-- Command palette: **Run Replace Rule on clipboard and paste...**
+- Command palette: **Replace Rules: Run Replace Rule on clipboard and paste...**
 - Keyboard shortcut: <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>V</kbd>
   - Additionally, custom keyboard shortcuts can be added to run a specific rule on the clipboard and paste. See the "Clipboard Replace" section under "Keyboard Shortcuts" above.
+
+### Stringify regular expression
+
+Formats a valid regular expression in JSON string format for use in rule objects.
+
+- Command palette: **Replace Rules: Stringify regular expression**
