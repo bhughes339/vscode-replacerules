@@ -20,7 +20,8 @@ Press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>R</kbd> and select the rule you'd like
 
 - Object key - (Required) The description of the rule that will appear in the command palette.
 - `find` - (Required) A sequence of regular expressions to be searched on. Can be a single string or an array of strings.
-- `replace` - (Optional) A sequence of regular expressions used as replacements. Can be a single string or an array of strings. If this is an empty string or unspecified, each instance of `find` will be deleted.
+  - Note: Regular expressions need to be properly escaped for use in VSCode settings strings. If you're unsure how to do this, **Replace Rules: Stringify regular expression** from the Command Palette will do it for you.
+- `replace` - (Optional) A sequence of strings used as replacements. Can be a single string or an array of strings. If this is an empty string or unspecified, each instance of `find` will be deleted.
 - `flags` - (Optional) A set of RegEx flags to apply to the rule. If only one set of flags is specified, it will be applied to all `finds` in the rule. The default flags are "gm" (global, multi-line). A list of compatible flags can be found [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Advanced_searching_with_flags).
 - `languages` - (Optional) An array of workspace language ids that the rule is restricted to. For example, a rule with `languages` set to 'typescript' will only appear in the **Run Rule...** menu if TypeScript is the selected language for the active document.
 - `literal` - (Optional) Perform a non-RegEx, literal search and replace.
