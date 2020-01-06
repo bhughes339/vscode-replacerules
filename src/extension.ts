@@ -9,6 +9,10 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('replacerules.stringifyRegex', stringifyRegex));
 }
 
+export function deactivate() {
+    
+}
+
 function runSingleRule(textEditor: vscode.TextEditor, _edit: vscode.TextEditorEdit, args?: any) {
     let editP = new ReplaceRulesEditProvider(textEditor);
     if (args) {
