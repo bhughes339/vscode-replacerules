@@ -94,13 +94,21 @@ export default class ReplaceRulesEditProvider {
         if (ruleset) {
             let ruleObject = new ReplaceRule({find: ''});
             try {
-                ruleset.rules.forEach((r: string) => {
-                    let rule = this.configRules[r];
-                    if (rule) {
-                        if (Array.isArray(rule.languages) && rule.languages.indexOf(language) === -1) {
-                            return;
+                ruleset.rules.forEach((r: string | string[]) => {
+                    if (Array.isArray(r)) {
+                        ruleObject.appendRule({
+                            "find": r[0],
+                            "replace": r[1],
+                            "literal": true
+                        })
+                    } else {
+                        let rule = this.configRules[r];
+                        if (rule) {
+                            if (Array.isArray(rule.languages) && rule.languages.indexOf(language) === -1) {
+                                return;
+                            }
+                            ruleObject.appendRule(this.configRules[r])
                         }
-                        ruleObject.appendRule(this.configRules[r])
                     }
                 });
                 if (ruleObject) this.doReplace(ruleObject);
