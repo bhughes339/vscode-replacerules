@@ -25,6 +25,7 @@
         "onCommand:replacerules.runRule",
         "onCommand:replacerules.runRuleset",
         "onCommand:replacerules.pasteAndReplace",
+        "onCommand:replacerules.pasteAndReplaceRuleset",
         "onCommand:replacerules.stringifyRegex"
     ],
     "main": "./out/extension.js",
@@ -44,6 +45,11 @@
                 "command": "replacerules.pasteAndReplace",
                 "title": "Run Replace Rule on clipboard and paste...",
                 "category": "Replace Rules"
+            },
+            {
+              "command": "replacerules.pasteAndReplaceRuleset",
+              "title": "Run a Replace Ruleset on clipboard and paste...",
+              "category": "Replace Rules"
             },
             {
                 "command": "replacerules.stringifyRegex",
