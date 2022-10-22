@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.4.2
+- New feature: Run ruleset on clipboard and paste into document (replacerules.pasteAndReplaceRuleset)
+  - Thanks to @dpfeil for the implementation
+
 ## 0.4.1
 - New feature: Stringify regular expression
   - Details in the new "Other Features" section in README
