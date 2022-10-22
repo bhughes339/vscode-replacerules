@@ -73,7 +73,7 @@ function stringifyRegex() {
                         vscode.env.clipboard.writeText(jString);
                     }
                 });
-            } catch (err) {
+            } catch (err: any) {
                 vscode.window.showErrorMessage(err.message);
             }
         }

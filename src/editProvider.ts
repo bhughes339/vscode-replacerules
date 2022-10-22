@@ -52,7 +52,7 @@ export default class ReplaceRulesEditProvider {
                         description: "",
                         key: r
                     });
-                } catch (err) {
+                } catch (err: any) {
                     Window.showErrorMessage('Error parsing rule ' + r + ': ' + err.message);
                 }
             }
@@ -72,7 +72,7 @@ export default class ReplaceRulesEditProvider {
                         description: "",
                         key: r
                     });
-                } catch (err) {
+                } catch (err: any) {
                     Window.showErrorMessage('Error parsing ruleset ' + r + ': ' + err.message);
                 }
             }
@@ -89,7 +89,7 @@ export default class ReplaceRulesEditProvider {
             }
             try {
                 this.doReplace(new ReplaceRule(rule));
-            } catch (err) {
+            } catch (err: any) {
                 Window.showErrorMessage('Error executing rule ' + ruleName + ': ' + err.message);
             }
         }
@@ -111,7 +111,7 @@ export default class ReplaceRulesEditProvider {
                     }
                 });
                 if (ruleObject) this.doReplace(ruleObject);
-            } catch (err) {
+            } catch (err: any) {
                 Window.showErrorMessage('Error executing ruleset ' + rulesetName + ': ' + err.message);
             }
         }
@@ -126,7 +126,7 @@ export default class ReplaceRulesEditProvider {
             }
             try {
                 this.doPasteReplace(new ReplaceRule(rule));
-            } catch (err) {
+            } catch (err: any) {
                 Window.showErrorMessage('Error executing rule ' + ruleName + ': ' + err.message);
             }
         }
@@ -183,7 +183,7 @@ export default class ReplaceRulesEditProvider {
                     }
                 });
                 if (ruleObject) this.doPasteReplace(ruleObject);
-            } catch (err) {
+            } catch (err: any) {
                 Window.showErrorMessage('Error executing ruleset ' + rulesetName + ': ' + err.message);
             }
         }
