@@ -99,7 +99,7 @@ export default class ReplaceRulesEditProvider {
         let language = this.textEditor.document.languageId;
         let ruleset = this.configRulesets[rulesetName];
         if (ruleset) {
-            let ruleObject = new ReplaceRule({find: ''});
+            let ruleObject = new ReplaceRule({ find: '' });
             try {
                 ruleset.rules.forEach((r: string) => {
                     let rule = this.configRules[r];
@@ -135,7 +135,7 @@ export default class ReplaceRulesEditProvider {
     private async doReplace(rule: ReplaceRule) {
         let e = this.textEditor;
         let d = e.document;
-        let editOptions = {undoStopBefore: false, undoStopAfter: false};
+        let editOptions = { undoStopBefore: false, undoStopAfter: false };
         let numSelections = e.selections.length;
         for (const x of Array(numSelections).keys()) {
             let sel = e.selections[x];
@@ -154,7 +154,7 @@ export default class ReplaceRulesEditProvider {
 
     private async doPasteReplace(rule: ReplaceRule) {
         let e = this.textEditor;
-        let editOptions = {undoStopBefore: false, undoStopAfter: false};
+        let editOptions = { undoStopBefore: false, undoStopAfter: false };
         let clip = stripCR(await vscode.env.clipboard.readText());
         for (const r of rule.steps) {
             clip = clip.replace(r.find, r.replace);
@@ -168,25 +168,25 @@ export default class ReplaceRulesEditProvider {
     }
 
     public pasteReplaceRuleset(rulesetName: string) {
-      let language = this.textEditor.document.languageId;
-      let ruleset = this.configRulesets[rulesetName];
-      if (ruleset) {
-          let ruleObject = new ReplaceRule({find: ''});
-          try {
-              ruleset.rules.forEach((r: string) => {
-                  let rule = this.configRules[r];
-                  if (rule) {
-                      if (Array.isArray(rule.languages) && rule.languages.indexOf(language) === -1) {
-                          return;
-                      }
-                      ruleObject.appendRule(this.configRules[r])
-                  }
-              });
-              if (ruleObject) this.doPasteReplace(ruleObject);
-          } catch (err) {
-              Window.showErrorMessage('Error executing ruleset ' + rulesetName + ': ' + err.message);
-          }
-      }
+        let language = this.textEditor.document.languageId;
+        let ruleset = this.configRulesets[rulesetName];
+        if (ruleset) {
+            let ruleObject = new ReplaceRule({ find: '' });
+            try {
+                ruleset.rules.forEach((r: string) => {
+                    let rule = this.configRules[r];
+                    if (rule) {
+                        if (Array.isArray(rule.languages) && rule.languages.indexOf(language) === -1) {
+                            return;
+                        }
+                        ruleObject.appendRule(this.configRules[r])
+                    }
+                });
+                if (ruleObject) this.doPasteReplace(ruleObject);
+            } catch (err) {
+                Window.showErrorMessage('Error executing ruleset ' + rulesetName + ': ' + err.message);
+            }
+        }
     }
 
     constructor(textEditor: TextEditor) {

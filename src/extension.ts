@@ -48,14 +48,14 @@ function pasteReplace(textEditor: vscode.TextEditor, _edit: vscode.TextEditorEdi
 }
 
 function pasteReplaceRuleset(textEditor: vscode.TextEditor, _edit: vscode.TextEditorEdit, args?: any) {
-  let editP = new ReplaceRulesEditProvider(textEditor);
-  if (args) {
-      let rulesetName = args['rulesetName'];
-      editP.pasteReplaceRuleset(rulesetName);
-  } else {
-      editP.pickRulesetAndPaste();
-  }
-  return;
+    let editP = new ReplaceRulesEditProvider(textEditor);
+    if (args) {
+        let rulesetName = args['rulesetName'];
+        editP.pasteReplaceRuleset(rulesetName);
+    } else {
+        editP.pickRulesetAndPaste();
+    }
+    return;
 }
 
 function stringifyRegex() {
