@@ -1,8 +1,11 @@
 import * as vscode from 'vscode';
 
 import ReplaceRulesEditProvider from './editProvider';
+import { RuleTreeDataProvider, RuleSetTreeDataProvider } from "./treeViewProvider";
 
 export function activate(context: vscode.ExtensionContext) {
+    vscode.window.registerTreeDataProvider('Rule', new RuleTreeDataProvider());
+    vscode.window.registerTreeDataProvider('RuleSet', new RuleSetTreeDataProvider());
     context.subscriptions.push(vscode.commands.registerTextEditorCommand('replacerules.runRule', runSingleRule));
     context.subscriptions.push(vscode.commands.registerTextEditorCommand('replacerules.runRuleset', runRuleset));
     context.subscriptions.push(vscode.commands.registerTextEditorCommand('replacerules.pasteAndReplace', pasteReplace));
@@ -17,7 +20,7 @@ export function deactivate() {
 function runSingleRule(textEditor: vscode.TextEditor, _edit: vscode.TextEditorEdit, args?: any) {
     let editP = new ReplaceRulesEditProvider(textEditor);
     if (args) {
-        let ruleName = args['ruleName'];
+        let ruleName = args.ruleName || args.label;
         editP.runSingleRule(ruleName);
     } else {
         editP.pickRuleAndRun();
@@ -28,7 +31,7 @@ function runSingleRule(textEditor: vscode.TextEditor, _edit: vscode.TextEditorEd
 function runRuleset(textEditor: vscode.TextEditor, _edit: vscode.TextEditorEdit, args?: any) {
     let editP = new ReplaceRulesEditProvider(textEditor);
     if (args) {
-        let rulesetName = args['rulesetName'];
+        let rulesetName = args.rulesetName || args.label;
         editP.runRuleset(rulesetName);
     } else {
         editP.pickRulesetAndRun();

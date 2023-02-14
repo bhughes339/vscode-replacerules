@@ -30,16 +30,53 @@
     ],
     "main": "./out/extension.js",
     "contributes": {
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "replace-rules",
+                    "title": "Replace Rules",
+                    "icon": "$(replace)"
+                }
+            ]
+        },
+        "views": {
+            "replace-rules": [
+                {
+                    "id": "Rule",
+                    "name": "Rule"
+                },
+                {
+                    "id": "RuleSet",
+                    "name": "RuleSet"
+                }
+            ]
+        },
+        "menus": {
+            "view/item/context": [
+              {
+                  "command": "replacerules.runRule",
+                  "when": "view == Rule",
+                  "group": "inline"
+              },
+              {
+                  "command": "replacerules.runRuleset",
+                  "when": "view == RuleSet",
+                  "group": "inline"
+              }
+            ]
+        },
         "commands": [
             {
                 "command": "replacerules.runRule",
                 "title": "Run Rule...",
-                "category": "Replace Rules"
+                "category": "Replace Rules",
+                "icon": "$(play)"
             },
             {
                 "command": "replacerules.runRuleset",
                 "title": "Run Ruleset...",
-                "category": "Replace Rules"
+                "category": "Replace Rules",
+                "icon": "$(play)"
             },
             {
                 "command": "replacerules.pasteAndReplace",
