@@ -1,19 +1,17 @@
 import * as vscode from 'vscode';
 
 class TreeDataProvider implements vscode.TreeDataProvider<TreeItem> {
-    onDidChangeTreeData?: vscode.Event<TreeItem|null|undefined>|undefined;
-  
+    private _onDidChangeTreeData: vscode.EventEmitter<TreeItem | undefined | null | void> 
+        = new vscode.EventEmitter<TreeItem | undefined | null | void>();
+
+    readonly onDidChangeTreeData: vscode.Event<TreeItem | undefined | null | void> = this._onDidChangeTreeData.event;
+
     data: TreeItem[] = [];
 
-    key: string;
-  
-    constructor(key: string) {
-        this.key = key;
-        const config : any = vscode.workspace.getConfiguration().get('replacerules');
-        if(!config || !config[key]) return
-        for (const k in config[key]) {
-            this.data.push(new TreeItem(k));
-        }
+    constructor(private key: string) { }
+
+    refresh(): void {
+        this._onDidChangeTreeData.fire();
     }
   
     getTreeItem(element: TreeItem): vscode.TreeItem|Thenable<vscode.TreeItem> {
@@ -22,6 +20,12 @@ class TreeDataProvider implements vscode.TreeDataProvider<TreeItem> {
   
     getChildren(element?: TreeItem|undefined): vscode.ProviderResult<TreeItem[]> {
       if (element === undefined) {
+        this.data = []
+        const config : any = vscode.workspace.getConfiguration().get('replacerules');
+        if(!config || !config[this.key]) return
+        for (const k in config[this.key]) {
+            this.data.push(new TreeItem(k));
+        }
         return this.data;
       }
       return element.children;

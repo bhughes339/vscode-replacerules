@@ -4,8 +4,16 @@ import ReplaceRulesEditProvider from './editProvider';
 import { RuleTreeDataProvider, RuleSetTreeDataProvider } from "./treeViewProvider";
 
 export function activate(context: vscode.ExtensionContext) {
-    vscode.window.registerTreeDataProvider('Rule', new RuleTreeDataProvider());
-    vscode.window.registerTreeDataProvider('RuleSet', new RuleSetTreeDataProvider());
+    const ruleTreeDataProvider = new RuleTreeDataProvider();
+    const ruleSetTreeDataProvider = new RuleSetTreeDataProvider();
+    vscode.window.registerTreeDataProvider('Rule', ruleTreeDataProvider);
+    vscode.window.registerTreeDataProvider('RuleSet', ruleSetTreeDataProvider);
+    context.subscriptions.push(vscode.commands.registerCommand('replacerules.refreshRules', () =>
+        ruleTreeDataProvider.refresh()
+    ));
+    context.subscriptions.push(vscode.commands.registerCommand('replacerules.refreshRuleSet', () =>
+        ruleSetTreeDataProvider.refresh()
+    ));
     context.subscriptions.push(vscode.commands.registerTextEditorCommand('replacerules.runRule', runSingleRule));
     context.subscriptions.push(vscode.commands.registerTextEditorCommand('replacerules.runRuleset', runRuleset));
     context.subscriptions.push(vscode.commands.registerTextEditorCommand('replacerules.pasteAndReplace', pasteReplace));

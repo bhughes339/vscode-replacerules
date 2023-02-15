@@ -63,6 +63,18 @@
                   "when": "view == RuleSet",
                   "group": "inline"
               }
+            ],
+            "view/title": [
+                {
+                    "command": "replacerules.refreshRules",
+                    "when": "view == Rule",
+                    "group": "navigation"
+                },
+                {
+                    "command": "replacerules.refreshRuleSet",
+                    "when": "view == RuleSet",
+                    "group": "navigation"
+                }
             ]
         },
         "commands": [
@@ -92,6 +104,18 @@
                 "command": "replacerules.stringifyRegex",
                 "title": "Stringify regular expression",
                 "category": "Replace Rules"
+            },
+            {
+                "command": "replacerules.refreshRules",
+                "title": "Refresh Rules",
+                "category": "Replace Rules",
+                "icon": "$(refresh)"
+            },
+            {
+                "command": "replacerules.refreshRuleSet",
+                "title": "Refresh RuleSet",
+                "category": "Replace Rules",
+                "icon": "$(refresh)"
             }
         ],
         "keybindings": [
